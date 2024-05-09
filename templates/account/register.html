@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Main Section Start -->
+		<div class="main-section">
+    <div class="page-section nopadding cs-nomargin" style="margin-top: 0px; padding-top: 60px; padding-bottom: 30px; margin-bottom: 0px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="signup-form login-form">
+                        <div class="tab-content">
+                            <div id="signup_box" class="tab-pane fade in active">
+                                <div class="scetion-title">
+                                    <h2>Sign Up</h2>
+                                </div>
+                                <div class="input-info">
+                                    <div class="row">
+                                        <form class="wp-user-form webkit">
+                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                <div class="field-holder">
+                                                    <input type="text" size="20" tabindex="11" value="Username">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                <div class="field-holder">
+                                                    <input type="password" value="Password">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                <div class="field-holder">
+                                                    <input type="text" placeholder="Last Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                <div class="field-holder">
+                                                    <input type="email" placeholder="Email">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                                <div class="shortcode-ajax-signup-button input-button-loader">
+                                                    <input type="button" class="cs-bgcolor user-submit acc-submit" value="Create Account">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                                <div class="login-section">
+                                                    <i class="icon-user-add"></i> Already have an account?
+                                                    <a href="#login_box" data-toggle="tab" class="login-link-page">Login here</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
