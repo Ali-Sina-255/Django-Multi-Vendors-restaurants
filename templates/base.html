@@ -32,28 +32,13 @@
 </head>
 
 <body>
-	<!--Main Wrapper-->
-	<div class="wrapper">
-		<!-- Header Start -->
-		{% include 'includes/navbar.html' %}
-		<!-- Header End -->
-  
+	{% comment %} NavBar Start {% endcomment %}
+    {% include 'includes/navbar.html' %}
+	{% comment %} EnD Start {% endcomment %}
+		{% block content %}
 
-		<!-- Main Section Start -->
-        {% block content %}
-        {% endblock %}
-        
-        <!-- Main Section End -->
-        
-        
-		<!-- Footer Start -->
-		{% include 'includes/footer.html' %}
-		<!-- Footer End -->
-	</div>
-	
-	<!-- Modal Popup End -->
-	<script src="{% static "assets/js/scripts.js" %}"></script>
-	<script src="{% static "assets/js/functions.js" %}"></script>
-</body>
-
-</html>
+         {% endblock %}
+		{% comment %} Footer Start {% endcomment %}
+        {% include 'includes/footer.html' %}
+		{% comment %} Footer End {% endcomment %}
+ 
