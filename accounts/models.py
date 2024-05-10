@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db.models.signals import post_save, pre_save
 
 
 class UserManager(BaseUserManager):
@@ -90,4 +91,3 @@ class UserProfile(models.Model):
 
     def __str__(self) -> str:
         return self.user.email
-
