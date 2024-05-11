@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "FoodOnline.apps.FoodonlineConfig",
     'accounts.apps.AccountsConfig',
+    'vendor.apps.VendorConfig',
 
 ]
 
