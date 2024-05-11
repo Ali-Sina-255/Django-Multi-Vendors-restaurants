@@ -3,10 +3,31 @@ from .forms import UserRegistrationForm
 from .models import User, UserProfile
 from django.contrib import messages, auth
 from vendor.forms import VendorRegisterForm
+from .utils import detect_user , send_verification_email
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import PermissionDenied
+
+
+# Restrict the vendor from accessing the customers page
+def check_rol_vendor(user):
+    if user.role == 1:
+        return True
+    raise PermissionDenied
+
+
+# Restrict the vendor from accessing the customers page
+def check_role_customer(user):
+    if user.role == 2:
+        return True
+    raise PermissionDenied
 
 
 def user_registration(reqeust):
-    if reqeust.method == 'POST':
+    if reqeust.user.is_authenticated():
+        messages.warning(reqeust, 'your are already registered')
+        return redirect('my_account')
+
+    elif reqeust.method == 'POST':
         form = UserRegistrationForm(reqeust.POST)
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
@@ -21,6 +42,9 @@ def user_registration(reqeust):
                 email=email)
             user.role = User.Customer
             user.save()
+            # send the verification email
+            send_verification_email(reqeust, user)
+            
             messages.success(reqeust, 'Your registration was successfully')
             user.redirect('home')
         else:
@@ -32,7 +56,11 @@ def user_registration(reqeust):
 
 
 def register_vendor(reqeust):
-    if reqeust.method == 'POST':
+    if reqeust.user.is_authenticated():
+        messages.warning(reqeust, 'your are already registered')
+        return redirect('my_account')
+
+    elif reqeust.method == 'POST':
         form = UserRegistrationForm(reqeust.POST)
         vendor_form = VendorRegisterForm(reqeust.POST, reqeust.FILES)
         if form.is_valid() and vendor_form.is_valid():
@@ -74,14 +102,18 @@ def register_vendor(reqeust):
 
 
 def login_view(reqeust):
-    if reqeust.method == 'POST':
+    if reqeust.user.is_authenticated:
+        messages.warning(reqeust, 'You are already logged in')
+        return redirect('my_account')
+
+    elif reqeust.method == 'POST':
         email = reqeust.POST.get('email')
         password = reqeust.POST.get('password')
         user = auth.authenticate(reqeust, email=email, password=password)
         if user is not None:
             auth.login(reqeust, user)
             messages.success(reqeust, 'You are now logged in')
-            return redirect('dashboard')
+            return redirect('my_account')
         else:
             messages.error(reqeust, 'Invalid Credentials')
             return redirect('login')
@@ -94,5 +126,20 @@ def logout_view(reqeust):
     return redirect('login')
 
 
-def dashboard_view(reqeust):
-    return render(reqeust, 'account/dashboard.html')
+@login_required(login_url='login')
+def my_account_view(request):
+    user = request.user
+    redirect_url = detect_user(user)
+    return redirect(redirect_url)
+
+
+@login_required(login_url='login')
+@user_passes_test(check_rol_vendor)
+def vendor_dashboard_view(reqeust):
+    return render(reqeust, 'account/vendor_dashboard.html')
+
+
+@login_required(login_url='login')
+@user_passes_test(check_role_customer)
+def customer_dashboard_view(reqeust):
+    return render(reqeust, 'account/customer_vendor_dashboard.html')

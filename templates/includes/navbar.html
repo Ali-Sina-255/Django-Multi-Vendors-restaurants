@@ -34,7 +34,7 @@
                             {% if user.is_authenticated %}
                             <a class="cs-color cs-popup-joinus-btn login-popup"  href="{% url 'logout' %}">logout </a>
                             
-                            <a class="cs-color cs-popup-joinus-btn login-popup get-start-btn"  href="">My Dashboard </a>
+                            <a class="cs-color cs-popup-joinus-btn login-popup get-start-btn"  href="{% url 'my_account' %}">My Dashboard </a>
                             {% else %}
                             <a class="cs-color cs-popup-joinus-btn login-popup"  href="{% url 'login' %}">Login </a> /
                                 <span> <a href='{% url "register" %}' class="cs-color cs-popup-joinus-btn login-popup ml-0" >Register<a/> </span>
