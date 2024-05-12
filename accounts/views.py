@@ -25,13 +25,13 @@ def check_role_customer(user):
     raise PermissionDenied
 
 
-def user_registration(reqeust):
-    if reqeust.user.is_authenticated:
-        messages.warning(reqeust, 'your are already registered')
+def user_registration(request):
+    if request.user.is_authenticated:
+        messages.warning(request, 'your are already registered')
         return redirect('my_account')
 
-    elif reqeust.method == 'POST':
-        form = UserRegistrationForm(reqeust.POST)
+    elif request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
@@ -43,31 +43,31 @@ def user_registration(reqeust):
                 last_name=last_name,
                 username=username,
                 email=email)
-            user.role = User.Customer
+            user.role = User.CUSTOMER
             user.save()
             # send the verification email
-            mail_subject = 'Reset your password'
+            mail_subject = 'Please Activate your Registration'
             email_template = 'account/email/verification_email.html'
-            send_verification_email(reqeust, user, mail_subject, email_template)
+            send_verification_email(request, user, mail_subject, email_template)
 
-            messages.success(reqeust, 'Your registration was successfully')
-            user.redirect('home')
+            messages.success(request, 'Your registration was successfully')
+            return redirect('home')
         else:
             print(form.errors)
     else:
         form = UserRegistrationForm()
     context = {'form': form}
-    return render(reqeust, 'account/register.html', context)
+    return render(request, 'account/register.html', context)
 
 
-def register_vendor(reqeust):
-    if reqeust.user.is_authenticated:
-        messages.warning(reqeust, 'your are already registered')
+def register_vendor(request):
+    if request.user.is_authenticated:
+        messages.warning(request, 'your are already registered')
         return redirect('my_account')
 
-    elif reqeust.method == 'POST':
-        form = UserRegistrationForm(reqeust.POST)
-        vendor_form = VendorRegisterForm(reqeust.POST, reqeust.FILES)
+    elif request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        vendor_form = VendorRegisterForm(request.POST, request.FILES)
         if form.is_valid() and vendor_form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
@@ -90,14 +90,14 @@ def register_vendor(reqeust):
             # send the verification email
             mail_subject = 'Reset your password'
             email_template = 'account/email/verification_email.html'
-            send_verification_email(reqeust, user, mail_subject, email_template)
+            send_verification_email(request, user, mail_subject, email_template)
 
-            messages.success(reqeust,
+            messages.success(request,
                              'Your restaurant registration has been registered  successfully! please with for the '
                              'approval.')
             return redirect('register_vendor')
         else:
-            messages.error(reqeust, 'Registration was not registered successfully')
+            messages.error(request, 'Registration was not registered successfully')
             return redirect('register_vendor')
             print(form.errors)
             print(vendor_form.errors)
@@ -109,10 +109,10 @@ def register_vendor(reqeust):
         'vendor_form': vendor_form,
 
     }
-    return render(reqeust, 'account/register_restaurant.html', context)
+    return render(request, 'account/register_restaurant.html', context)
 
 
-def activate(reqeust, uidb64, token):
+def activate(request, uidb64, token):
     # activated the user by settings the is_active to true
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -123,58 +123,60 @@ def activate(reqeust, uidb64, token):
     if user is not None and default_token_generator.check_token(user, token):
         user.is_active = True
         user.save()
-        messages.success(reqeust, 'congratulation your account is activated')
+        messages.success(request, 'congratulation your account is activated')
         return redirect('my_account')
     else:
-        messages.error(reqeust, 'Invalid Activation links')
+        messages.error(request, 'Invalid Activation links')
         return redirect('my_account')
-    return render()
+    
 
 
-def login_view(reqeust):
-    if reqeust.user.is_authenticated:
-        messages.warning(reqeust, 'You are already logged in')
+def login_view(request):
+    if request.user.is_authenticated:
+        messages.warning(request, 'You are already logged in')
         return redirect('my_account')
-
-    elif reqeust.method == 'POST':
-        email = reqeust.POST.get('email')
-        password = reqeust.POST.get('password')
-        user = auth.authenticate(reqeust, email=email, password=password)
+    
+    elif request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = auth.authenticate(email=email, password=password)
+        print(email)
+        print(password)
         if user is not None:
-            auth.login(reqeust, user)
-            messages.success(reqeust, 'You are now logged in')
+            auth.login(request, user)
+            messages.success(request, 'you are logged in Now')
             return redirect('my_account')
         else:
-            messages.error(reqeust, 'Invalid Credentials')
+            messages.error(request, 'Invalid Credentials !')
             return redirect('login')
-    return render(reqeust, 'account/login.html')
+    return render(request, 'account/login.html')
 
 
-def logout_view(reqeust):
-    auth.logout(reqeust)
-    messages.error(reqeust, 'you are logged out now')
+def logout_view(request):
+    auth.logout(request)
+    messages.error(request, 'you are logged out now')
     return redirect('login')
 
 
-def forgot_password_view(reqeust):
-    if reqeust.method == 'POST':
-        email = reqeust.POST['email']
+def forgot_password_view(request):
+    if request.method == 'POST':
+        email = request.POST['email']
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email__iexact=email)
             mail_subject = 'Reset your password'
             email_template = 'account/email/reset_password_email.html'
-            send_verification_email(reqeust, user, mail_subject, email_template)
+            send_verification_email(request, user, mail_subject, email_template)
             # send_reset_password_email(reqeust, user)
-            messages.success(reqeust, 'Your password reset link has been sent to your email address')
+            messages.success(request, 'Your password reset link has been sent to your email address')
             return redirect('login')
         else:
-            messages.error(reqeust, 'Account does not exist')
+            messages.error(request, 'Account does not exist')
             return redirect('forgot_password')
 
-    return render(reqeust, 'account/forgot_password.html')
+    return render(request, 'account/forgot_password.html')
 
 
-def reset_password_validate_view(reqeust, uidb64, token):
+def reset_password_validate_view(request, uidb64, token):
     # Validate the user by decoding the token and user primary key
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
@@ -183,33 +185,32 @@ def reset_password_validate_view(reqeust, uidb64, token):
         user = None
 
     if user is not None and default_token_generator.check_token(user, token):
-        reqeust.session['uid'] = uid
-        messages.info('please reset your password')
+        request.session['uid'] = uid
+        messages.info(request,'please reset your password')
         return redirect('reset_password')
     else:
-        messages.error(reqeust, 'this link has been expired')
+        messages.error(request, 'this link has been expired')
         return redirect('my_account')
 
 
-def reset_password_view(reqeust):
-    if reqeust.method == 'POST':
-        password = reqeust.POST['password']
-        confirm_password = reqeust.POST['confirm_password']
+def reset_password_view(request):
+    if request.method == 'POST':
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
 
         if password == confirm_password:
-            pk = reqeust.session.get('uid')
+            pk = request.session.get('uid')
             user = User.objects.get(pk=pk)
             user.set_password(password)
             user.is_active = True
             user.asave()
-            messages.success('your password has been reset successfully')
+            messages.success(request,'your password has been reset successfully')
             return redirect('login')
 
         else:
-            messages.error(reqeust, 'password dont match')
+            messages.error(request, 'password dont match')
             return redirect('reset_password')
-
-    return render(reqeust, 'account/reset_password.html')
+    return render(request, 'account/reset_password.html')
 
 
 @login_required(login_url='login')
@@ -221,11 +222,11 @@ def my_account_view(request):
 
 @login_required(login_url='login')
 @user_passes_test(check_rol_vendor)
-def vendor_dashboard_view(reqeust):
-    return render(reqeust, 'account/vendor_dashboard.html')
+def vendor_dashboard_view(request):
+    return render(request, 'account/vendor_dashboard.html')
 
 
 @login_required(login_url='login')
 @user_passes_test(check_role_customer)
-def customer_dashboard_view(reqeust):
-    return render(reqeust, 'account/customer_vendor_dashboard.html')
+def customer_dashboard_view(request):
+    return render(request, 'account/customer_vendor_dashboard.html')
