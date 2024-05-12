@@ -13,7 +13,7 @@ class Vendor(models.Model):
 
     def __str__(self) -> str:
         return self.vendor_name
-
+ 
     def save(self,*args, **kwargs):
         if self.pk is not None:
             # Update
@@ -26,11 +26,8 @@ class Vendor(models.Model):
                 }
                 if self.is_approved == True:
                     mail_subject = 'Congratulation Your restaurant has been approved'
-                    
                     send_notification(mail_subject, mail_template , context)
                 else:
                     mail_subject = "we're  sorry, you are not eligible for publishing your food menu on our marketplace."
                     send_notification(mail_subject, mail_template , context)
-
-
         return super(Vendor, self).save(*args, **kwargs)

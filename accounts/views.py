@@ -9,6 +9,8 @@ from .utils import detect_user, send_verification_email, send_reset_password_ema
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.tokens import default_token_generator
+from vendor.models import Vendor
+
 
 
 # Restrict the vendor from accessing the customers page
@@ -41,8 +43,10 @@ def user_registration(request):
             user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
+                email=email,
                 username=username,
-                email=email)
+                password=password
+            )
             user.role = User.CUSTOMER
             user.save()
             # send the verification email
@@ -77,8 +81,9 @@ def register_vendor(request):
             user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
+                email=email,
                 username=username,
-                email=email)
+                password=password)
             user.role = User.VENDOR
             user.save()
             vendor = vendor_form.save(commit=False)
@@ -98,9 +103,10 @@ def register_vendor(request):
             return redirect('register_vendor')
         else:
             messages.error(request, 'Registration was not registered successfully')
-            return redirect('register_vendor')
             print(form.errors)
             print(vendor_form.errors)
+            return redirect('register_vendor')
+          
     else:
         form = UserRegistrationForm()
         vendor_form = VendorRegisterForm()
@@ -197,7 +203,6 @@ def reset_password_view(request):
     if request.method == 'POST':
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
-
         if password == confirm_password:
             pk = request.session.get('uid')
             user = User.objects.get(pk=pk)
@@ -229,4 +234,4 @@ def vendor_dashboard_view(request):
 @login_required(login_url='login')
 @user_passes_test(check_role_customer)
 def customer_dashboard_view(request):
-    return render(request, 'account/customer_vendor_dashboard.html')
+    return render(request, 'account/customer_dashboard.html')
