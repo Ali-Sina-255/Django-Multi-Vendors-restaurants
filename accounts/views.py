@@ -3,7 +3,7 @@ from .forms import UserRegistrationForm
 from .models import User, UserProfile
 from django.contrib import messages, auth
 from vendor.forms import VendorRegisterForm
-from .utils import detect_user , send_verification_email
+from .utils import detect_user, send_verification_email
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 
@@ -44,7 +44,7 @@ def user_registration(reqeust):
             user.save()
             # send the verification email
             send_verification_email(reqeust, user)
-            
+
             messages.success(reqeust, 'Your registration was successfully')
             user.redirect('home')
         else:
@@ -81,6 +81,9 @@ def register_vendor(reqeust):
             user_profile = UserProfile.objects.get(user=user)
             vendor.user_profile = user_profile
             vendor.save()
+
+            # send the verification email
+            send_verification_email(reqeust, user)
             messages.success(reqeust,
                              'Your restaurant registration has been registered  successfully! please with for the '
                              'approval.')
@@ -99,6 +102,10 @@ def register_vendor(reqeust):
 
     }
     return render(reqeust, 'account/register_restaurant.html', context)
+
+
+def activate(reqeust, uidb64, token):
+    return render()
 
 
 def login_view(reqeust):

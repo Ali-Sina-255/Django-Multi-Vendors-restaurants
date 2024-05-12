@@ -118,3 +118,4 @@ EMAIL_PORT = '587'
 EMAIL_HOST_USER = 'alisinasultani255@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'foodOnline Marketplace<alisultani255@gmail.com>'
