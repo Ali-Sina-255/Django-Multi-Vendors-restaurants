@@ -83,7 +83,8 @@ def register_vendor(request):
                 last_name=last_name,
                 email=email,
                 username=username,
-                password=password)
+                password=password
+            )
             user.role = User.VENDOR
             user.save()
             vendor = vendor_form.save(commit=False)
@@ -91,12 +92,10 @@ def register_vendor(request):
             user_profile = UserProfile.objects.get(user=user)
             vendor.user_profile = user_profile
             vendor.save()
-
             # send the verification email
             mail_subject = 'Reset your password'
             email_template = 'account/email/verification_email.html'
             send_verification_email(request, user, mail_subject, email_template)
-
             messages.success(request,
                              'Your restaurant registration has been registered  successfully! please with for the '
                              'approval.')
@@ -106,7 +105,7 @@ def register_vendor(request):
             print(form.errors)
             print(vendor_form.errors)
             return redirect('register_vendor')
-          
+    
     else:
         form = UserRegistrationForm()
         vendor_form = VendorRegisterForm()
