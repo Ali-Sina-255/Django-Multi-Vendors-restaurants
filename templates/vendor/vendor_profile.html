@@ -1,176 +1,179 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-{% include 'includes/messages.html' %}
+<!-- Main Section Start -->
+<div class="main-section">
+	{% include 'includes/cover.html' %}
+	<div class="page-section account-header buyer-logged-in">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+					<!-- Load sidebar -->
+				{% include 'includes/vendor_sidebar.html' %}
+				</div>
 
-		<!-- Main Section Start -->
-		<div class="main-section">
-			{% include 'includes/cover.html' %}
-			<div class="page-section account-header buyer-logged-in">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-							<!-- Load sidebar -->
-                     {% include 'includes/vendor_sidebar.html' %}
-						</div>
-
-						<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-							<div class="user-dashboard loader-holder">
-								<div class="user-holder">
-									<h5 class="text-upercase">Manage Your Restaurant</h2>
-									<!-- My Restaurants Form Start -->
-									<form action="{% url 'vendor_profile' %}" enctype="multipart/form-data">
-										{% csrf_token %}
-										<div class="form-fields-set">
-											<ul>
-												<li>
-													<div class="row">
-														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-															<div class="restaurant-info">
-																<div class="img-holder">
-																	<ul class="foodbakery-gallery-holder">
-																		<li class="gal-img">
-																			<div class="drag-list">
-																				<div class="item-thumb">
-																					<img class="thumbnail" src="assets/extra-images/listing-logo18.png" alt="">
-																				</div>
-																			</div>
-																		</li>
-																	</ul>
-																</div>
-																<div class="text-holder">
-																	<label>Update Logo</label>
-																	<div class="upload-gallery">
-																		{{profile_form.profile_pic}}
-																	</div>
-																</div>
-																<label >{{profile_form.profile_pic.errors}}</label>
-															</div>
-														</div>
-														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-															<div class="restaurant-info">
-																<div class="img-holder">
-																	<ul class="foodbakery-gallery-holder">
-																		<li class="gal-img">
-																			<div class="drag-list">
-																				<div class="item-thumb">
-																					<img class="thumbnail" src="assets/extra-images/cover-photo01.jpg" alt="">
-																				</div>
-																			</div>
-																		</li>
-																	</ul>
-																</div>
-																<div class="text-holder">
-																	<label>Update Cover Photo</label>
-																	<div class="upload-gallery">
-																		{{profile_form.cover_pic}}
+				<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+					<div class="user-dashboard loader-holder">
+						<div class="user-holder">
+							<h5 class="text-upercase">Manage Your Restaurant</h2>
+							<!-- My Restaurants Form Start -->
+							<form action="{% url 'vendor_profile' %}" method ='POST' enctype="multipart/form-data">
+								{% csrf_token %}
+								<div class="form-fields-set">
+									<ul>
+										<li>
+											<div class="row">
+												<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+													<div class="restaurant-info">
+														<div class="img-holder">
+															<ul class="foodbakery-gallery-holder">
+																<li class="gal-img">
+																	<div class="drag-list">
+																		<div class="item-thumb">
+																			<img class="thumbnail" src="{{profile.profile_pic.url}}" alt="">
+																			
+																		</div>
 																	</div>
 																	
-																</div>
-																<label >{{profile_form.cover_pic.errors}}</label>
-															</div>
-														</div>
-														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-															<div class="restaurant-info">
-																<div class="img-holder">
-																	<ul class="foodbakery-gallery-holder">
-																		<li class="gal-img">
-																			<div class="drag-list">
-																				<div class="item-thumb">
-																					<img class="thumbnail" src="assets/extra-images/cover-photo01.jpg" alt="">
-																				</div>
-																			</div>
-																		</li>
-																	</ul>
-																</div>
-																<div class="text-holder">
-																	<label>Update License</label>
-																	<div class="upload-gallery">
-																		{{vendor_from.vendor_licenses}}
-																	</div>
-																	
-																</div>
-																<label >{{vendor_form.vendor_licenses_errors}}</label>
-															</div>
-														</div>
-														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-															<div class="field-holder">
-																<label>Restaurant name *</label>
-																{{vendor_from.vendor_name}}
-															</div>
-														</div>
-
-														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-															<div class="field-holder">
-																<label>Address *</label>
-																{{profile_form.address}}
-																<small class="text-muted float-right">powered by google</small>
-															</div>
-
-														</div>
-														<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-															<div class="field-holder">
-																<label>Country * </label>
-																{{profile_form.country}}
-															</div>
-														</div>
-
-														<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-															<div class="field-holder">
-																<label>State * </label>
-																{{profile_form.state}}
-															</div>
-														</div>
-														<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-															<div class="field-holder">
-																<label>City * </label>
-																{{profile_form.city}}
-															</div>
-														</div>
-
-														<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-															<div class="field-holder">
-																<label>Pin Code * </label>
-																{{profile_form.pin_code}}
-															</div>
-														</div>
-														<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-															<div class="field-holder">
-																<label>Latitude * </label>
-																{{profile_form.latitude}}
-															</div>
+																</li>
+															</ul>
 														</div>
 														
-														<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-															<div class="field-holder">
-																<label>Longitude * </label>
-																{{profile_form.longitude}}
+														<div class="text-holder">
+															<label>Update Logo</label>
+															<div class="upload-gallery">
+																{{profile_form.profile_pic}}
 															</div>
 														</div>
-														
-														
-														
+														<label class="tex-danger">	{{ profile_form.profile_pic.errors }}</label>
 													</div>
-												</li>
-											</ul>
-											<div>
-												<div class="field-holder">
-													<div class="payment-holder input-button-loader">
-														<input type="submit" value="Update Restaurant" >
+													
+												</div>
+												<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+													<div class="restaurant-info">
+														<div class="img-holder">
+															<ul class="foodbakery-gallery-holder">
+																<li class="gal-img">
+																	<div class="drag-list">
+																		<div class="item-thumb">
+																			<img class="thumbnail" src="{{profile.cover_pic.url}}" alt="">
+																		</div>
+																	</div>
+																</li>
+															</ul>
+														</div>
+														<div class="text-holder">
+															<label>Update Cover Photo</label>
+															<div class="upload-gallery">
+																{{profile_form.cover_pic}}
+															</div>
+															
+														</div>
+														<label >{{profile_form.cover_pic.errors}}</label>
 													</div>
 												</div>
+												<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+													<div class="restaurant-info">
+														<div class="img-holder">
+															<ul class="foodbakery-gallery-holder">
+																<li class="gal-img">
+																	<div class="drag-list">
+																		<div class="item-thumb">
+																			<img class="thumbnail" src="{{vendor.vendor_licenses.url}}" alt="">
+																			
+																		</div>
+																	</div>
+																</li>
+															</ul>
+														</div>
+														<div class="text-holder">
+															<label>Update License</label>
+															<div class="upload-gallery">
+																{{vendor_from.vendor_licenses}}
+															</div>
+														</div>
+														<label >{{vendor_form.vendor_licenses.errors}}</label>
+													</div>
+												</div>
+												<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+													<div class="field-holder">
+														<label>Restaurant name *</label>
+														{{vendor_from.vendor_name}}
+													</div>
+												</div>
+
+												<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+													<div class="field-holder">
+														<label>Address *</label>
+														{{profile_form.address}}
+														<small class="text-muted float-right">powered by google</small>
+													</div>
+
+												</div>
+												<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+													<div class="field-holder">
+														<label>Country * </label>
+														{{profile_form.country}}
+													</div>
+												</div>
+
+												<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+													<div class="field-holder">
+														<label>State * </label>
+														{{profile_form.state}}
+													</div>
+												</div>
+												<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+													<div class="field-holder">
+														<label>City * </label>
+														{{profile_form.city}}
+													</div>
+												</div>
+
+												<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+													<div class="field-holder">
+														<label>Pin Code * </label>
+														{{profile_form.pin_code}}
+													</div>
+												</div>
+												<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+													<div class="field-holder">
+														<label>Latitude * </label>
+														{{profile_form.latitude}}
+													</div>
+												</div>
+												
+												<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+													<div class="field-holder">
+														<label>Longitude * </label>
+														{{profile_form.longitude}}
+													</div>
+												</div>
+												
+												
+												
+											</div>
+										</li>
+									</ul>
+									<div>
+										<div class="field-holder">
+											<div class="payment-holder input-button-loader">
+												<input type="submit" value="Update Restaurant" >
 											</div>
 										</div>
-									</form>
-									<!-- My Restaurants Form End -->
-
+									</div>
 								</div>
-							</div>
+							</form>
+							<!-- My Restaurants Form End -->
+							{% include 'includes/messages.html' %}
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- Main Section End -->
+	</div>
+</div>
+<!-- Main Section End -->
 
 {% endblock %}

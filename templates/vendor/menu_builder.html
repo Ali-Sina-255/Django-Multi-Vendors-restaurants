@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- Main Section Start -->
+<div class="main-section">
+	{% include 'includes/cover.html' %}
+	<div class="page-section account-header buyer-logged-in">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+					<!-- Load sidebar -->
+				{% include 'includes/vendor_sidebar.html' %}
+				</div>
+
+				<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+					<div class="user-dashboard loader-holder">
+						<div class="user-holder">
+							<h5 class="text-uppercase">Bulid Your Food Menu</h2>
+							<hr>
+                            <h6> Menu Categories </h6>
+                            <a href='#' class='btn btn-info float-right m-1'> <i class="fa-solid fa-plus fa-1x"></i> Add Food </a>
+                            <a href='#' class='btn btn-success float-right m-1'> <i class="fa-solid fa-plus fa-1x"></i> Add Category </a>
+                            <table class="table table-hover table-borderless">
+                    
+                                <tbody>
+                                    {% for category in categories %}
+                                  <tr>
+                                    <td scope="row" class='text-left'>{{forloop.counter}}</td>
+                                    <td class='text-left'>
+                                        <a href='#' class='mb-0 font-weidth-blod'><p style='margin:0px'>{{category}}</p>
+                                        <small class='text-muted'>{{category.description}}</small>
+                                        </a>
+                                    </td>
+                                    <td> <i class="fa-solid fa-pencil fa-1x"></i> &nbsp; <i class="fa-solid fa-trash fa-1x text-danger"></i></td>
+                                  </tr>
+                                 {% endfor %}
+                                </tbody>
+                              </table>
+							{% include 'includes/messages.html' %}
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Main Section End -->
+
+{% endblock %}

@@ -68,10 +68,10 @@ def register_vendor(request):
     if request.user.is_authenticated:
         messages.warning(request, 'your are already registered')
         return redirect('my_account')
-
+    
     elif request.method == 'POST':
         form = UserRegistrationForm(request.POST)
-        vendor_form = VendorRegisterForm(request.POST, request.FILES)
+        vendor_form = VendorRegisterForm(request.POST,request.FILES)
         if form.is_valid() and vendor_form.is_valid():
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
@@ -105,7 +105,7 @@ def register_vendor(request):
             print(form.errors)
             print(vendor_form.errors)
             return redirect('register_vendor')
-    
+
     else:
         form = UserRegistrationForm()
         vendor_form = VendorRegisterForm()
