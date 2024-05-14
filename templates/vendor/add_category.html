@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- Main Section Start -->
+<div class="main-section">
+	{% include 'includes/cover.html' %}
+	<div class="page-section account-header buyer-logged-in">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+					<!-- Load sidebar -->
+				{% include 'includes/vendor_sidebar.html' %}
+				</div>
+
+				<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+					<div class="user-dashboard loader-holder">
+						<div class="user-holder">
+							<h5 class="text-uppercase">Bulid Your Food Menu</h2>
+							<hr>
+                            <h6> Add New Category </h6>
+                           <form method = 'POST', action=''>
+                            {% csrf_token %}
+                            <div class="form-field-set">
+                                <div class="row">
+                                   <div  class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="field-holder">
+                                        <label >Category</label>
+                                        {{form.category_name}}
+                                    </div>
+                                    <div class="field-holder">
+                                        <label >Category</label>
+                                        {{form.description}}
+                                    </div>
+                                   </div>
+                                </div>
+                                <div>
+                                    <div class="field-holder">
+                                        <div class="payment-holder input-button-loader">
+                                            <input type="submit" value="Submit From" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% for field in form %}
+                                {% if field.errors %}
+                                    {% for error in field.errors %}
+                                       <li style="color: red;">{{error}}</li>
+                                    {% endfor %}
+                                {% endif %}
+
+                            {% endfor %}
+                           </form>
+							{% include 'includes/messages.html' %}
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Main Section End -->
+
+{% endblock %}
