@@ -11,7 +11,7 @@ from menu.models import Category, FootItem
 
 from . forms import VendorRegisterForm 
 from . models import Vendor
-from menu.forms import CategoryForm
+from menu.forms import CategoryForm, FoodItemForm
 
 
 
@@ -127,3 +127,23 @@ def delete_category(request, pk):
     category.delete()
     messages.success(request, 'your category is deleted')
     return redirect('menu_builder')
+
+def add_food_view(request):
+    if request.method == 'POST':
+        form =FoodItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            food_title = form.cleaned_data['food_title']
+            food = form.save(commit=False)
+            food.vendor = get_vendor(request)
+            food.slug = slugify(food_title)
+            form.save()
+            messages.success(request, 'food item is added successfully')
+            return redirect('food_items_by_category', food.category.id)
+        else:
+            print(form.errors)
+            messages.error(request, 'your food item is not added')
+            return redirect('add_food')
+    else:
+        form = FoodItemForm()
+    context = {"form":form}
+    return render(request, 'vendor/add_food.html',context)

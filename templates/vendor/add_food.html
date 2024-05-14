@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- Main Section Start -->
+<div class="main-section">
+	{% include 'includes/cover.html' %}
+	<div class="page-section account-header buyer-logged-in">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+					<!-- Load sidebar -->
+				{% include 'includes/vendor_sidebar.html' %}
+				</div>
+
+				<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+					<div class="user-dashboard loader-holder">
+						<div class="user-holder">
+							<h5 class="text-uppercase">Bulid Your Food Menu</h2>
+							<hr>
+                            <h6> Add New Food Item </h6>
+                            <button onclick='history.back()' class='btn btn-secondary mb-2'> <i class="fa-solid fa-angle-left fa-1x"></i>  &nbsp;Back</button>
+                            <br>
+
+                           <form method = 'POST', action='{% url "add_food" %}'  enctype="multipart/form-data" >
+                            {% csrf_token %}
+                            <div class="form-field-set">
+                                <div class="row">
+                                   <div  class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="field-holder">
+                                            <label >Food title *</label>
+                                            {{form.food_title}}
+                                        </div>  
+                                   </div>
+
+                                   <div  class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="field-holder">
+                                            <label >Food Category *</label>
+                                            {{form.category}}
+                                        </div>  
+                                    </div>
+
+                                    <div  class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="field-holder">
+                                            <label >Food Description *</label>
+                                            {{form.description}}
+                                        </div>  
+                                   </div>
+                                   <div  class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="field-holder">
+                                        <label >Food price *</label>
+                                        {{form.price}}
+                                    </div> 
+                                </div>
+                                    <div  class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="field-holder">
+                                            <label >Food Image *</label>
+                                            {{form.image}}
+                                        </div>  
+                                        {{form.image.error}}
+                                     </div>
+                                     <div  class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="field-holder">
+                                            <label >Food Avaialable *</label>
+                                            {{form.is_available}}
+                                        </div>
+                                </div>
+
+                                </div>
+                                    <div>
+                                        <div class="field-holder">
+                                            <div class="payment-holder input-button-loader">
+                                                <input type="submit" value="Submit From" >
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div>
+                                {% if form.errors %}
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <p> {{ error }} </p>
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
+                            </div>
+                           </form>
+							{% include 'includes/messages.html' %}
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Main Section End -->
+
+{% endblock %}

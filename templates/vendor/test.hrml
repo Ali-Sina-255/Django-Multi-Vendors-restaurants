@@ -1,0 +1,10 @@
+
+<div class="field-holder">
+    <label >Food Description *</label>
+    {{form.description}}
+</div>
+
+<div class="field-holder">
+    <label >Food Price *</label>
+    {{form.price}}
+</div>
