@@ -17,11 +17,12 @@
 						<div class="user-holder">
 							<h5 class="text-uppercase">Bulid Your Food Menu</h2>
 							<hr>
-                            <h6> Add New Food Item </h6>
-                            <button onclick='history.back()' class='btn btn-secondary mb-2'> <i class="fa-solid fa-angle-left fa-1x"></i>  &nbsp;Back</button>
+                            <button onclick='history.back()' class='btn btn-secondary mb-3'> <i class="fa-solid fa-angle-left fa-1x"></i>  &nbsp;Back</button>
                             <br>
 
-                           <form method = 'POST', action='{% url "add_food" %}'  enctype="multipart/form-data" >
+                            <h6> Update Your Food Itme </h6>
+                           <form method ='POST', action='{% url "edit_food" food.id %}'  enctype="multipart/form-data">
+                            {% csrf_token %}
                             {% csrf_token %}
                             <div class="form-field-set">
                                 <div class="row">
@@ -55,6 +56,7 @@
                                         <div class="field-holder">
                                             <label >Food Image *</label>
                                             {{form.image}}
+                                            <img src="{{food.image.url}}" alt="" class='mt-2' width='100'>
                                         </div>  
                                         {{form.image.error}}
                                      </div>
