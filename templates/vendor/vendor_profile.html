@@ -30,8 +30,12 @@
 																<li class="gal-img">
 																	<div class="drag-list">
 																		<div class="item-thumb">
+																			{% if profile.profile_pic %}
 																			<img class="thumbnail" src="{{profile.profile_pic.url}}" alt="">
-																			
+																			{% else %}
+																			<img class="thumbnail" src="{%  static 'assets/images/default-profile.PNG' %}" alt="">
+
+																			{% endif %}
 																		</div>
 																	</div>
 																	
@@ -56,7 +60,12 @@
 																<li class="gal-img">
 																	<div class="drag-list">
 																		<div class="item-thumb">
+																			{% if profile.cover_pic %}
 																			<img class="thumbnail" src="{{profile.cover_pic.url}}" alt="">
+																			{% else %}
+																			<img class="thumbnail" src="{% static 'assets/images/default-cover.png' %}" alt="">
+
+																			{% endif %}
 																		</div>
 																	</div>
 																</li>

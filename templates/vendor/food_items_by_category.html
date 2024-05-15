@@ -28,10 +28,19 @@
                       <tr>
                         <td  class='text-left'>{{forloop.counter}}</td>
                         <td class='text-left'><img src='{{food.image.url}}' alt='Food Image' width='60px'></td>
+                        
                         <td class='text-left'>
                             <a href='#' class='mb-0 font-weidth-blod'><p style='margin:0px'>{{food}}</p>
                             <small class='text-muted'>{{food.description}}</small>
                             </a>
+                        </td>
+                        <td>
+                          {% if food.is_available %}
+                          <span class="badge badge-pill badge-success">Avaliable</span>
+                          {% else %}
+
+                          <span class="badge badge-pill badge-danger">Not Avaliable</span>
+                          {% endif %}
                         </td>
                         <td> <a href="{% url 'edit_food' food.id %}" style='color:unset'><i class="fa-solid fa-pencil fa-1x"></i></a> &nbsp; <a href="{% url 'delete_food' food.id %}"><i class="fa-solid fa-trash fa-1x text-danger"></i></a></td>
                       </tr>

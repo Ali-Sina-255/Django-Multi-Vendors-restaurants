@@ -181,12 +181,12 @@ def edit_food_view(request, pk=None):
             return redirect("edit_food", food.id)
     else:
         form = FoodItemForm(instance=food)
+
     context = {
         "food": food,
         "form": form
     }
     return render(request, 'vendor/edit_food.html', context)
-
 
 
 @login_required(login_url='login')
