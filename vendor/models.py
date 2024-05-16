@@ -14,20 +14,20 @@ class Vendor(models.Model):
     def __str__(self) -> str:
         return self.vendor_name
  
-    def save(self,*args, **kwargs):
-        if self.pk is not None:
-            # Update
-            orig = Vendor.objects.get(pk=self.pk)
-            if orig.is_approved != self.is_approved:
-                mail_template = 'account/email/admin_approved.html'
-                context = {
-                    "user": self.user,
-                    "is_approved":self.is_approved
-                }
-                if self.is_approved == True:
-                    mail_subject = 'Congratulation Your restaurant has been approved'
-                    send_notification(mail_subject, mail_template , context)
-                else:
-                    mail_subject = "we're  sorry, you are not eligible for publishing your food menu on our marketplace."
-                    send_notification(mail_subject, mail_template , context)
-        return super(Vendor, self).save(*args, **kwargs)
+    # def save(self,*args, **kwargs):
+    #     if self.pk is not None:
+    #         # Update
+    #         orig = Vendor.objects.get(pk=self.pk)
+    #         if orig.is_approved != self.is_approved:
+    #             mail_template = 'account/email/admin_approved.html'
+    #             context = {
+    #                 "user": self.user,
+    #                 "is_approved":self.is_approved
+    #             }
+    #             if self.is_approved == True:
+    #                 mail_subject = 'Congratulation Your restaurant has been approved'
+    #                 send_notification(mail_subject, mail_template , context)
+    #             else:
+    #                 mail_subject = "we're  sorry, you are not eligible for publishing your food menu on our marketplace."
+    #                 send_notification(mail_subject, mail_template , context)
+    #     return super(Vendor, self).save(*args, **kwargs)
