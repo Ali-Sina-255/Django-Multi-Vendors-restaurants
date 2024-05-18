@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.utils.http import urlsafe_base64_decode
-
+from django.template.defaultfilters import slugify
 from .forms import UserRegistrationForm
 from .models import User, UserProfile
 from django.contrib import messages, auth
@@ -89,6 +89,8 @@ def register_vendor(request):
             user.save()
             vendor = vendor_form.save(commit=False)
             vendor.user = user
+            vendor_name = form.cleaned_data['vendor_name']
+            vendor.slug = slugify(vendor_name) + '-' + str(user.id)
             user_profile = UserProfile.objects.get(user=user)
             vendor.user_profile = user_profile
             vendor.save()
