@@ -28,8 +28,7 @@ def vendor_detail(request, vendor_slug):
     )
     if request.user.is_authenticated:
         cart_item = Cart.objects.filter(user=request.user)
-        for cart in cart_item:
-            print('cart item quantity is :',cart.quantity)
+       
     else:
         cart_item = 0
 
@@ -67,4 +66,40 @@ def add_to_cart_view(request,food_id=None):
 
             return JsonResponse({"status":"Failed","message":"Invalid Request"})
     
-    return JsonResponse({'status':"Failed", 'message':'Please login to continue'})
+    return JsonResponse({'status':"login_required", 'message':'Please login to continue'})
+
+
+def decrease_cart_view(request, food_id):
+    if request.user.is_authenticated:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            # check if the food item is exist in the cart
+            try:
+                food_item = FootItem.objects.get(id=food_id)
+                print(food_item)
+                # if the user is already added to the cart
+                try:
+                    check_cart = Cart.objects.get(user=request.user, food_item=food_item)
+                    # decrease the cart item 
+                    if check_cart.quantity > 1:
+                        check_cart.quantity -= 1
+                        check_cart.save()
+                    else:
+                        check_cart.delete()
+                        check_cart.quantity = 0
+                    return JsonResponse({"status":"success", "cart_counter":get_cart_counter(request), 'qty':check_cart.quantity})
+
+                except:
+                    return JsonResponse({'status':"Failed","message":"You don't have this item in your cart"})
+                
+            except:
+                return JsonResponse({"status":"Failed", 'message':'this food does not exist!'})
+
+        else:
+
+            return JsonResponse({"status":"Failed","message":"Invalid Request"})
+    
+    return JsonResponse({'status':"login_required", 'message':'Please login to continue'})
+
+
+def cart_view(request):
+    return render(request, 'marketplace/cart.html')

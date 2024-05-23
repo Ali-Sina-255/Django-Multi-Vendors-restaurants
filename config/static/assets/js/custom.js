@@ -3,17 +3,27 @@ $(document).ready(function () {
     e.preventDefault();
     food_id = $(this).attr("data-id");
     url = $(this).attr("data-url");
-    data = {
-      food_id: food_id,
-    };
+    // data = {
+    //   food_id: food_id,
+    // };
     $.ajax({
       type: "GET",
       url: url,
-      data: data,
+      // data: data,
       success: function (response) {
         console.log(response);
-        $("#cart_counter").html(response.cart_counter["cart_counter"]);
-        $("#qty-" + food_id).html(response.qty);
+        if (response.status == "login_required") {
+          swal(response.message, "", "info").then(function () {
+            window.location == "/login";
+          });
+          if (response.status == "Failed") {
+            swal(response.message, "", "error");
+          }
+          console.log("raise error message");
+        } else {
+          $("#cart_counter").html(response.cart_counter["cart_counter"]);
+          $("#qty-" + food_id).html(response.qty);
+        }
       },
     });
   });
@@ -24,4 +34,35 @@ $(document).ready(function () {
     console.log(qty);
     $("#" + the_id).html(qty);
   });
+
+  // Decrease the card quantity
+  $(".decrease_cart").on("click", function (e) {
+    e.preventDefault();
+    food_id = $(this).attr("data-id");
+    url = $(this).attr("data-url");
+
+    // if not data the url contain the id
+    // data = {
+    //   food_id: food_id,
+    // };
+    $.ajax({
+      type: "GET",
+      url: url,
+
+      success: function (response) {
+        console.log(response);
+        if (response.status == "login_required") {
+          swal(response.message, "", "info").then(function () {
+            window.location == "/login";
+          });
+        } else if (response.status == "Failed") {
+          swal(response.message, "", "error");
+        } else {
+          $("#cart_counter").html(response.cart_counter["cart_counter"]);
+          $("#qty-" + food_id).html(response.qty);
+        }
+      },
+    });
+  });
+  // place the cart item quantity on load
 });

@@ -31,7 +31,6 @@ def user_registration(request):
     if request.user.is_authenticated:
         messages.warning(request, 'your are already registered')
         return redirect('my_account')
-
     elif request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -67,8 +66,7 @@ def user_registration(request):
 def register_vendor(request):
     if request.user.is_authenticated:
         messages.warning(request, 'your are already registered')
-        return redirect('my_account')
-    
+        return redirect('my_account')   
     elif request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         vendor_form = VendorRegisterForm(request.POST,request.FILES)
@@ -136,13 +134,10 @@ def activate(request, uidb64, token):
         messages.error(request, 'Invalid Activation links')
         return redirect('my_account')
     
-
-
 def login_view(request):
     if request.user.is_authenticated:
         messages.warning(request, 'You are already logged in')
         return redirect('my_account')
-    
     elif request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -157,8 +152,6 @@ def login_view(request):
             messages.error(request, 'Invalid Credentials !')
             return redirect('login')
     return render(request, 'account/login.html')
-
-
 def logout_view(request):
     auth.logout(request)
     messages.error(request, 'you are logged out now')
