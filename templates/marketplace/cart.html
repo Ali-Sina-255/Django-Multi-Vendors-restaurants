@@ -15,11 +15,14 @@
                             <div id="home" class="tab-pane in active">
                                 <div class="menu-itam-holder">
                                     <div id="menu-item-list-6272" class="menu-itam-list">
-                                        
+                                        <div class="text-center p-5" id='empty-cart' style='display:none'>
+                                            <h3>Cart is empty</h3>
+                                        </div>
                                         <ul>
                                             {% if cart_item %}
+
                                             {% for item in cart_item %}
-                                            <li>
+                                            <li id='cart-item-{{item.id}}'>
                                                 <div class="image-holder"><img src="{{item.food_item.image.url}}" alt=""></a></div>
                                                 <div class="text-holder">
                                                     <h6>{{item.food_item|truncatechars:35}} </h6>
@@ -30,7 +33,7 @@
                                                     <a href="#" class='decrease_cart'  data-id='{{item.food_item.id}}' data-url='{% url "decrease_cart" item.food_item.id %}' style='margin-right:28px'><i class="icon-minus text-color"></i></a>
                                                     <label id='qty-{{item.food_item.id}}'>0</label>
                                                     <a href="#" class='add_to_cart' data-id='{{item.food_item.id}}' data-url='{% url "add_to_cart" item.food_item.id %}'><i class="icon-plus4 text-color"></i></a>
-                                                    <a href="#" class='delete_cart' data-id='{{item.id}}' data-url='{% url "delete_cart" item.food_item.id %}'><i class="icon-delete text-color"></i></a>
+                                                    <a href="#" class='delete_cart' data-id='{{item.id}}' data-url='{% url "delete_cart" item.id %}'><i class="icon-delete text-color"></i></a>
                                                      
                                                 </div>
                                             </li>

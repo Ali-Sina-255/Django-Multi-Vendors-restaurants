@@ -82,6 +82,8 @@ $(document).ready(function () {
         } else {
           $("#cart_counter").html(response.cart_counter["cart_counter"]);
           swal(response.status, response.message, "success");
+          removeCartItem(0, cart_id);
+          CheckEmptyCart();
         }
       },
     });
@@ -89,7 +91,16 @@ $(document).ready(function () {
   // DELETE CART ITEM WITHOUT RELOADING PAGE
   function removeCartItem(cartItemQty, cart_id) {
     if (cartItemQty <= 0) {
+      document.getElementById("cart-item-" + cart_id).remove();
       console.log("this is not working in this time ");
+    }
+  }
+
+  // CHECK IF CART EMPTY
+  function CheckEmptyCart() {
+    var cart_counter = document.getElementById("cart_counter").innerHTML;
+    if (cart_counter == 0) {
+      document.getElementById("empty-cart").style.display = "block";
     }
   }
 });

@@ -39,6 +39,7 @@ def user_registration(request):
             email = form.cleaned_data['email']
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+
             user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
@@ -87,7 +88,7 @@ def register_vendor(request):
             user.save()
             vendor = vendor_form.save(commit=False)
             vendor.user = user
-            vendor_name = form.cleaned_data['vendor_name']
+            vendor_name = vendor_form.cleaned_data['vendor_name']
             vendor.slug = slugify(vendor_name) + '-' + str(user.id)
             user_profile = UserProfile.objects.get(user=user)
             vendor.user_profile = user_profile
@@ -142,8 +143,6 @@ def login_view(request):
         email = request.POST['email']
         password = request.POST['password']
         user = auth.authenticate(email=email, password=password)
-        print(email)
-        print(password)
         if user is not None:
             auth.login(request, user)
             messages.success(request, 'you are logged in Now')
@@ -152,6 +151,7 @@ def login_view(request):
             messages.error(request, 'Invalid Credentials !')
             return redirect('login')
     return render(request, 'account/login.html')
+
 def logout_view(request):
     auth.logout(request)
     messages.error(request, 'you are logged out now')

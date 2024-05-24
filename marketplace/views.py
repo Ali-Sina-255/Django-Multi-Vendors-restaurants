@@ -121,3 +121,11 @@ def delete_cart_view(request, cart_id):
 
         else:
             return JsonResponse({"status":"Failed","message":"Invalid Request"})
+        
+
+def delete_cart_item_view(request):
+    context = {}
+    return render(request,'marketplace/vendor_detail.html',context)
+
+
+
