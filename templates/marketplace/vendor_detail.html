@@ -109,6 +109,7 @@
                                         <div class="element-title" id="menu-category-2">
                                             <h5 class="text-color">{{category.category_name}}</h5>
                                             <span>{{category.description}}</span>
+                                            
                                         </div>
                                         <ul>
                                             {% for food in category.fooditems.all %}
@@ -117,6 +118,7 @@
                                                 <div class="text-holder">
                                                     <h6>{{food}} </h6>
                                                     <span>{{food.description}}</span>
+                                                    
                                                 </div>
                                                 <div class="price-holder">
                                                     <span class="price">$ {{food.price}}</span>

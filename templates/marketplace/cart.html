@@ -26,11 +26,11 @@
                                                 <div class="image-holder"><img src="{{item.food_item.image.url}}" alt=""></a></div>
                                                 <div class="text-holder">
                                                     <h6>{{item.food_item|truncatechars:35}} </h6>
-                                                    <span>{{item.food_item.description|truncatechars:50}}</span>
+                                                    <a href="{% url 'vendor_detail' item.food_item.vendor.vendor_slug %}"><span class="badge badge-warning mt-2"  style='width: 130px;text-decration:none'>{{item.food_item.vendor}}</span></a>
                                                 </div>
                                                 <div class="price-holder">
                                                     <span class="price">$ {{item.food_item.price}}</span>
-                                                    <a href="#" class='decrease_cart'  data-id='{{item.food_item.id}}' data-url='{% url "decrease_cart" item.food_item.id %}' style='margin-right:28px'><i class="icon-minus text-color"></i></a>
+                                                    <a href="#" class='decrease_cart'  data-id='{{item.food_item.id}}' id='{{item.id}}' data-url='{% url "decrease_cart" item.food_item.id %}' style='margin-right:28px'><i class="icon-minus text-color"></i></a>
                                                     <label id='qty-{{item.food_item.id}}'>0</label>
                                                     <a href="#" class='add_to_cart' data-id='{{item.food_item.id}}' data-url='{% url "add_to_cart" item.food_item.id %}'><i class="icon-plus4 text-color"></i></a>
                                                     <a href="#" class='delete_cart' data-id='{{item.id}}' data-url='{% url "delete_cart" item.id %}'><i class="icon-delete text-color"></i></a>
@@ -45,8 +45,6 @@
                                             </div>
                                         {% endif %}
                                         </ul>
-                                       
-                                        
                                     </div>
                                     {% for item in cart_item %}
                                     <span id='qty-{{item.food_item.id}}' class='item_qty d-none' data-qty="{{item.quantity}}"></span>
@@ -74,7 +72,7 @@
                                                 Subtotal
                                                 <span class="price float-right">
                                                     <span class='currency'>$</span>
-                                                    <span id='total'>0</span>
+                                                    <span id='subtotal'>0</span>
                                                 </span>
                                             </li>
                                             <li style='list-style-type: none;'>
@@ -88,7 +86,7 @@
                                                 Total
                                                 <span class="price float-right font-weigth:600">
                                                     <span class='currency'>$</span>
-                                                    <span id='total'>0</span>
+                                                    <span id='grand_total'>0</span>
                                                 </span>
                                             </li>
                                         </ul>

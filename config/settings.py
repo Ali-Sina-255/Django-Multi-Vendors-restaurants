@@ -13,9 +13,7 @@ SECRET_KEY = "django-insecure-f6ey=rqu180jgpbr#*k$haah92yu_0_r738gmokylkp321%8@o
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -23,7 +21,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    
+
     "FoodOnline.apps.FoodonlineConfig",
     'accounts.apps.AccountsConfig',
     'vendor.apps.VendorConfig',
@@ -56,7 +54,8 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "accounts.context_processorss.get_vendor",
-                "marketplace.context_processors.get_cart_counter"
+                "marketplace.context_processors.get_cart_counter",
+                "marketplace.context_processors.get_cart_amounts",
             ],
         },
     },

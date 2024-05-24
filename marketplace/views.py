@@ -6,10 +6,11 @@ from django.contrib.auth.decorators import login_required
 from menu.models import Category, FootItem
 from vendor.models import Vendor
 from marketplace.models import Cart
-from . context_processors import get_cart_counter
+from . context_processors import get_cart_counter, get_cart_amounts
 
 
 # Create your views here.
+@login_required(login_url='login')
 def marketplace_view(request):
     vendors = Vendor.objects.filter(is_approved=True, user__is_active=True)
     vendor_count = vendors.count()
@@ -54,11 +55,11 @@ def add_to_cart_view(request,food_id=None):
                     # increase the cart item 
                     check_cart.quantity += 1
                     check_cart.save()
-                    return JsonResponse({"status":"success","message":"Increased the cart quantity", "cart_counter":get_cart_counter(request), 'qty':check_cart.quantity})
+                    return JsonResponse({"status":"success","message":"Increased the cart quantity", "cart_counter":get_cart_counter(request), 'qty':check_cart.quantity, "cart_amount":get_cart_amounts(request)})
 
                 except:
                     check_cart = Cart.objects.create(user=request.user, food_item=food_item, quantity=1)
-                    return JsonResponse({'status':"Success","message":"added to the card item","cart_counter":get_cart_counter(request),'qty':check_cart.quantity})
+                    return JsonResponse({'status':"Success","message":"added to the card item","cart_counter":get_cart_counter(request),'qty':check_cart.quantity, "cart_amount":get_cart_amounts(request)})
                 
             except:
                 return JsonResponse({"status":"Failed", 'message':'this food does not exist!'})
@@ -103,7 +104,7 @@ def decrease_cart_view(request, food_id):
 
 
 def cart_view(request):
-    cart_item = Cart.objects.filter(user=request.user)
+    cart_item = Cart.objects.filter(user=request.user).order_by('-created_at')
     context = {"cart_item":cart_item}
     return render(request, 'marketplace/cart.html', context)
 
@@ -122,10 +123,6 @@ def delete_cart_view(request, cart_id):
         else:
             return JsonResponse({"status":"Failed","message":"Invalid Request"})
         
-
-def delete_cart_item_view(request):
-    context = {}
-    return render(request,'marketplace/vendor_detail.html',context)
 
 
 

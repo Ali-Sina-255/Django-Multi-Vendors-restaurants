@@ -21,8 +21,17 @@ $(document).ready(function () {
           }
           console.log("raise error message");
         } else {
-          $("#cart_counter").html(response.cart_counter["cart_counter"]);
-          $("#qty-" + food_id).html(response.qty);
+          if (window.location.pathname == "/cart/") {
+            $("#cart_counter").html(response.cart_counter["cart_counter"]);
+            $("#qty-" + food_id).html(response.qty);
+            // adding subtotal tex  grand_total
+
+            ApplyCartAmount(
+              response.cart_amount['subtotal'],
+              response.cart_amount['total'],
+              response.cart_amount['grand_total'],
+            )
+          }
         }
       },
     });
@@ -40,15 +49,11 @@ $(document).ready(function () {
     e.preventDefault();
     food_id = $(this).attr("data-id");
     url = $(this).attr("data-url");
+    cart_id = $(this).attr("id");
 
-    // if not data the url contain the id
-    // data = {
-    //   food_id: food_id,
-    // };
     $.ajax({
       type: "GET",
       url: url,
-
       success: function (response) {
         console.log(response);
         if (response.status == "login_required") {
@@ -60,15 +65,19 @@ $(document).ready(function () {
         } else {
           $("#cart_counter").html(response.cart_counter["cart_counter"]);
           $("#qty-" + food_id).html(response.qty);
+          if (window.location.pathname == "/cart/") {
+            removeCartItem(response.qty, cart_id);
+            CheckEmptyCart();
+          }
         }
       },
     });
   });
+
   // place the cart item quantity on load
   // DELETE CART_ITEM
   $(".delete_cart").on("click", function (e) {
     e.preventDefault();
-
     cart_id = $(this).attr("data-id");
     url = $(this).attr("data-url");
 
@@ -102,5 +111,15 @@ $(document).ready(function () {
     if (cart_counter == 0) {
       document.getElementById("empty-cart").style.display = "block";
     }
+  }
+
+  // Cart Amount
+  function ApplyCartAmount(subtotal, total, grand_total) {
+    if (window.location.pathname == "/cart/") {
+    
+    $("#subtotal").html(subtotal);
+    $("#total").html(total);
+    $("#grand_total").html(grand_total);
+  
   }
 });
