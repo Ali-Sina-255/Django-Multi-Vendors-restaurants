@@ -1,4 +1,105 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %}
+<!-- Main Section Start -->
+<div class="main-section pt-5">
+    <div class="page-section ">
+        <div class="container pt-5">
+            <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <div class="tabs-holder horizontal">
+                        <ul class="stickynav-tabs nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#home"><i class='fa fa-shopping-cart text-danger'></i>Cart Item </a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane in active">
+                                <div class="menu-itam-holder">
+                                    <div id="menu-item-list-6272" class="menu-itam-list">
+                                        
+                                        <ul>
+                                            {% if cart_item %}
+                                            {% for item in cart_item %}
+                                            <li>
+                                                <div class="image-holder"><img src="{{item.food_item.image.url}}" alt=""></a></div>
+                                                <div class="text-holder">
+                                                    <h6>{{item.food_item|truncatechars:35}} </h6>
+                                                    <span>{{item.food_item.description|truncatechars:50}}</span>
+                                                </div>
+                                                <div class="price-holder">
+                                                    <span class="price">$ {{item.food_item.price}}</span>
+                                                    <a href="#" class='decrease_cart'  data-id='{{item.food_item.id}}' data-url='{% url "decrease_cart" item.food_item.id %}' style='margin-right:28px'><i class="icon-minus text-color"></i></a>
+                                                    <label id='qty-{{item.food_item.id}}'>0</label>
+                                                    <a href="#" class='add_to_cart' data-id='{{item.food_item.id}}' data-url='{% url "add_to_cart" item.food_item.id %}'><i class="icon-plus4 text-color"></i></a>
+                                                    <a href="#" class='delete_cart' data-id='{{item.id}}' data-url='{% url "delete_cart" item.food_item.id %}'><i class="icon-delete text-color"></i></a>
+                                                     
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                            {% else %}
 
-<h1>this is cart page in th</h1>
+                                            <div class="text-center p-5">
+                                                <h3>Cart is empty</h3>
+                                            </div>
+                                        {% endif %}
+                                        </ul>
+                                       
+                                        
+                                    </div>
+                                    {% for item in cart_item %}
+                                    <span id='qty-{{item.food_item.id}}' class='item_qty d-none' data-qty="{{item.quantity}}"></span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                {% comment %} Order {% endcomment %}
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="tabs-holder horizontal">
+                        <ul class="stickynav-tabs nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#home"><i class="icon- icon-room_service"></i>Your Order</a></li>
+                            
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane in active">
+                                <div class="menu-itam-holder">
+                                    <div class="">
+                                        <ul>
+                                            <li style='list-style-type: none;'>
+                                                Subtotal
+                                                <span class="price float-right">
+                                                    <span class='currency'>$</span>
+                                                    <span id='total'>0</span>
+                                                </span>
+                                            </li>
+                                            <li style='list-style-type: none;'>
+                                                Tex
+                                                <span class="price float-right">
+                                                    <span class='currency'>$</span>
+                                                    <span id='total'>0</span>
+                                                </span>
+                                            </li>
+                                            <li style='list-style-type: none;'>
+                                                Total
+                                                <span class="price float-right font-weigth:600">
+                                                    <span class='currency'>$</span>
+                                                    <span id='total'>0</span>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main Section End -->
+    
 {% endblock content %}

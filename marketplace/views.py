@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Prefetch
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from menu.models import Category, FootItem
 from vendor.models import Vendor
@@ -102,4 +103,21 @@ def decrease_cart_view(request, food_id):
 
 
 def cart_view(request):
-    return render(request, 'marketplace/cart.html')
+    cart_item = Cart.objects.filter(user=request.user)
+    context = {"cart_item":cart_item}
+    return render(request, 'marketplace/cart.html', context)
+
+@login_required(login_url='login')
+def delete_cart_view(request, cart_id):
+     if request.user.is_authenticated:
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            try:
+                cart_item = Cart.objects.get(user=request.user, id=cart_id)
+                if cart_item:
+                    cart_item.delete()
+                    return JsonResponse({"status":"success","message":"cart item has been deleted","cart_counter":get_cart_counter(request)})
+            except:
+                return JsonResponse({"status":"Failed", 'message':'this food does not exist!'})
+
+        else:
+            return JsonResponse({"status":"Failed","message":"Invalid Request"})
