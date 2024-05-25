@@ -15,10 +15,11 @@
                             <div id="home" class="tab-pane in active">
                                 <div class="menu-itam-holder">
                                     <div id="menu-item-list-6272" class="menu-itam-list">
-                                        <div class="text-center p-5" id='empty-cart' style='display:none'>
-                                            <h3>Cart is empty</h3>
-                                        </div>
+                                        
                                         <ul>
+                                            <div class="text-center p-5" id='empty_cart' style='display:none'>
+                                                <h3>Cart is empty</h3>
+                                            </div>
                                             {% if cart_item %}
 
                                             {% for item in cart_item %}
@@ -72,21 +73,21 @@
                                                 Subtotal
                                                 <span class="price float-right">
                                                     <span class='currency'>$</span>
-                                                    <span id='subtotal'>0</span>
+                                                    <span id='subtotal'>{{subtotal}}</span>
                                                 </span>
                                             </li>
                                             <li style='list-style-type: none;'>
                                                 Tex
                                                 <span class="price float-right">
                                                     <span class='currency'>$</span>
-                                                    <span id='total'>0</span>
+                                                    <span id='total'>{{total}}</span>
                                                 </span>
                                             </li>
                                             <li style='list-style-type: none;'>
                                                 Total
                                                 <span class="price float-right font-weigth:600">
                                                     <span class='currency'>$</span>
-                                                    <span id='grand_total'>0</span>
+                                                    <span id='grand_total'>{{grand_total}}</span>
                                                 </span>
                                             </li>
                                         </ul>

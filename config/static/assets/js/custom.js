@@ -3,13 +3,10 @@ $(document).ready(function () {
     e.preventDefault();
     food_id = $(this).attr("data-id");
     url = $(this).attr("data-url");
-    // data = {
-    //   food_id: food_id,
-    // };
+
     $.ajax({
       type: "GET",
       url: url,
-      // data: data,
       success: function (response) {
         console.log(response);
         if (response.status == "login_required") {
@@ -21,17 +18,15 @@ $(document).ready(function () {
           }
           console.log("raise error message");
         } else {
-          if (window.location.pathname == "/cart/") {
-            $("#cart_counter").html(response.cart_counter["cart_counter"]);
-            $("#qty-" + food_id).html(response.qty);
-            // adding subtotal tex  grand_total
+          $("#cart_counter").html(response.cart_counter["cart_count"]);
+          $("#qty-" + food_id).html(response.qty);
+          // adding subtotal tex  grand_total
 
-            ApplyCartAmount(
-              response.cart_amount['subtotal'],
-              response.cart_amount['total'],
-              response.cart_amount['grand_total'],
-            )
-          }
+          ApplyCartAmount(
+            response.cart_amount["subtotal"],
+            response.cart_amount["total"],
+            response.cart_amount["grand_total"]
+          );
         }
       },
     });
@@ -63,12 +58,17 @@ $(document).ready(function () {
         } else if (response.status == "Failed") {
           swal(response.message, "", "error");
         } else {
-          $("#cart_counter").html(response.cart_counter["cart_counter"]);
+          $("#cart_counter").html(response.cart_counter["cart_count"]);
           $("#qty-" + food_id).html(response.qty);
           if (window.location.pathname == "/cart/") {
             removeCartItem(response.qty, cart_id);
             CheckEmptyCart();
           }
+          ApplyCartAmount(
+            response.cart_amount["subtotal"],
+            response.cart_amount["total"],
+            response.cart_amount["grand_total"]
+          );
         }
       },
     });
@@ -94,6 +94,11 @@ $(document).ready(function () {
           removeCartItem(0, cart_id);
           CheckEmptyCart();
         }
+        ApplyCartAmount(
+          response.cart_amount["subtotal"],
+          response.cart_amount["total"],
+          response.cart_amount["grand_total"]
+        );
       },
     });
   });
@@ -109,17 +114,16 @@ $(document).ready(function () {
   function CheckEmptyCart() {
     var cart_counter = document.getElementById("cart_counter").innerHTML;
     if (cart_counter == 0) {
-      document.getElementById("empty-cart").style.display = "block";
+      document.getElementById("empty_cart").style.display = "block";
     }
   }
 
   // Cart Amount
   function ApplyCartAmount(subtotal, total, grand_total) {
     if (window.location.pathname == "/cart/") {
-    
-    $("#subtotal").html(subtotal);
-    $("#total").html(total);
-    $("#grand_total").html(grand_total);
-  
+      $("#subtotal").html(subtotal);
+      $("#total").html(total);
+      $("#grand_total").html(grand_total);
+    }
   }
 });

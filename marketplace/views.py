@@ -88,7 +88,7 @@ def decrease_cart_view(request, food_id):
                     else:
                         check_cart.delete()
                         check_cart.quantity = 0
-                    return JsonResponse({"status":"success", "cart_counter":get_cart_counter(request), 'qty':check_cart.quantity})
+                    return JsonResponse({"status":"success", "cart_counter":get_cart_counter(request), 'qty':check_cart.quantity,"cart_amount":get_cart_amounts(request)})
 
                 except:
                     return JsonResponse({'status':"Failed","message":"You don't have this item in your cart"})
@@ -116,7 +116,7 @@ def delete_cart_view(request, cart_id):
                 cart_item = Cart.objects.get(user=request.user, id=cart_id)
                 if cart_item:
                     cart_item.delete()
-                    return JsonResponse({"status":"success","message":"cart item has been deleted","cart_counter":get_cart_counter(request)})
+                    return JsonResponse({"status":"success","message":"cart item has been deleted","cart_counter":get_cart_counter(request),"cart_amount":get_cart_amounts(request)})
             except:
                 return JsonResponse({"status":"Failed", 'message':'this food does not exist!'})
 
