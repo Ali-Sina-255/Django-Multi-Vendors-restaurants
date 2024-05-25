@@ -45,7 +45,7 @@ DAY_CHOICES = [
     (6,"Saturday"),
     (7,"Sunday"),
 ]
-HOUR_OF_DAY_24 = [(time(h,m).strftime('%I :%M %p'),time(h,m).strftime('%I:%M %p')) for h in range(0, 24) for m in range(0,30, 29)]
+HOUR_OF_DAY_24 =  [(time(h,m).strftime('%I :%M %p'),time(h,m).strftime('%I:%M %p')) for h in range(0, 24) for m in range(0,31, 30)]
 class OpeningHour(models.Model):
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     day  = models.IntegerField(choices=DAY_CHOICES)
@@ -56,3 +56,6 @@ class OpeningHour(models.Model):
     class Meta:
         ordering = ("day","from_hour")
         unique_together = ('day','from_hour','to_hour')
+
+    def __str__(self) -> str:
+        return self.get_day_display()

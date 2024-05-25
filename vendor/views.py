@@ -9,8 +9,8 @@ from accounts.forms import UserProfileForm
 from accounts.views import check_rol_vendor
 from menu.models import Category, FootItem
 
-from . forms import VendorRegisterForm 
-from . models import Vendor
+from . forms import VendorRegisterForm , OpeningHoursForm
+from . models import Vendor, OpeningHour
 from menu.forms import CategoryForm, FoodItemForm
 from menu.models import FootItem
 
@@ -198,3 +198,14 @@ def delete_food_view(request,pk):
        messages.success(request, 'Food Item has been deleted successfully')
        return redirect('food_items_by_category', food.category.id)
    
+
+def opening_hours_view(request):
+    opening_hours = OpeningHour.objects.filter(vendor=get_vendor(request))
+    form = OpeningHoursForm()
+    context = {"form":form,"opening_hours":opening_hours}
+    return render(request, 'vendor/opening_hours.html',context)
+
+
+
+def add_opening_hour_view(request):
+    return HttpResponse('this is working')

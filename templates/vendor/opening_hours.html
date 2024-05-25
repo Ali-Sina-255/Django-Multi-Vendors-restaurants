@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- Main Section Start -->
+<div class="main-section">
+	{% include 'includes/cover.html' %}
+	<div class="page-section account-header buyer-logged-in">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+					<!-- Load sidebar -->
+				{% include 'includes/vendor_sidebar.html' %}
+				</div>
+
+				<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+					<div class="user-dashboard loader-holder">
+						<div class="user-holder">
+							<h5 class="text-uppercase">OPENING HOURS</h2>
+							<hr>
+							{% include 'includes/messages.html' %}
+							<table class='table opening_hours'>
+								<tbody>
+									{% for hour in opening_hours %}
+									<tr>
+										<td><b></b>{{hour}}</td>
+										<td>{% if hour.is_closed %}Closed {% else %} {{hour.from_hour}} - {{hour.to_hour}}  {% endif%} </td>
+										<td><a href="#">Remove</a></td>
+									</tr>
+									
+									{% endfor %}
+								</tbody>
+							</table>
+							<form id='opening_hours'>
+								{% csrf_token %}
+								<div class="row mt-2">
+									<div class="col-md-3">
+										{{form.day}}
+									</div>
+
+									<div class="col-md-2">
+										{{form.from_hour}}
+									</div>
+
+									<div class="col-md-2">
+										{{form.to_hour}}
+									</div>
+
+									<div class="col-md-2">
+										{{form.is_closed}}
+									</div>
+
+									<div class="col-md-2">
+										<button class='btn btn-success add_hour'>Add Hours</button>
+									</div>
+									
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Main Section End -->
+
+{% endblock %}
