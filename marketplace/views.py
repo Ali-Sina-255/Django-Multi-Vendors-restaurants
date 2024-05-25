@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Prefetch
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from menu.models import Category, FootItem
@@ -126,3 +126,5 @@ def delete_cart_view(request, cart_id):
 
 
 
+def search_view(request):
+    return HttpResponse("search")

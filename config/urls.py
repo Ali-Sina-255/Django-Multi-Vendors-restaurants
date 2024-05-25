@@ -9,6 +9,7 @@ urlpatterns = [
     path("", include("FoodOnline.urls")),
     path("accounts/", include("accounts.urls")),
     path('cart/',marketplace_view.cart_view,name='cart'),
+    path('search/',marketplace_view.search_view,name='search'),
     path("marketplace/", include("marketplace.urls")),
     
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
