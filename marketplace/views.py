@@ -4,9 +4,12 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from menu.models import Category, FootItem
-from vendor.models import Vendor
+from vendor.models import Vendor, OpeningHour
 from marketplace.models import Cart
 from . context_processors import get_cart_counter, get_cart_amounts
+from datetime import date
+from datetime import datetime
+
 
 
 # Create your views here.
@@ -28,6 +31,23 @@ def vendor_detail(request, vendor_slug):
                 queryset=FootItem.objects.filter(is_available=True)
         )
     )
+    opening_hours = OpeningHour.objects.filter(vendor=vendor).order_by("day","-from_hour")
+    today_date = date.today()
+    today = today_date.isoweekday()
+    print(today)
+
+    current_opening_hours = OpeningHour.objects.filter(vendor=vendor,day=today)
+    now =datetime.now() 
+    current_time = now.strftime('%H:%M:%S')
+    print('current time ',current_time)
+
+    # for hour in current_opening_hours:
+    #     start_time = datetime.strptime(hour.from_hour,"%I:%M %p").time()
+    #     end_time =datetime.strptime(hour.to_hour,"%I:%M %p").time()
+    #     print(start_time, end_time)
+    
+
+    print(opening_hours)
     if request.user.is_authenticated:
         cart_item = Cart.objects.filter(user=request.user)
        
@@ -37,7 +57,9 @@ def vendor_detail(request, vendor_slug):
     context = {
         "vendor": vendor, 
         "categories":categories,
-        "cart_item":cart_item
+        "cart_item":cart_item,
+        "opening_hours":opening_hours,
+        "current_opening_hours":current_opening_hours
     }
     return render(request,'marketplace/vendor_detail.html',context)
 

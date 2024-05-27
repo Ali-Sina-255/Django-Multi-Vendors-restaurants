@@ -21,12 +21,11 @@
 							<table class='table opening_hours'>
 								<tbody>
 									{% for hour in opening_hours %}
-									<tr>
-										<td><b></b>{{hour}}</td>
+									<tr id='hour-{{hour.id}}'>
+										<td><b>{{hour}}</b></td>
 										<td>{% if hour.is_closed %}Closed {% else %} {{hour.from_hour}} - {{hour.to_hour}}  {% endif%} </td>
-										<td><a href="#">Remove</a></td>
+										<td><a href="#" class='remove_hour' data-url='{% url "remove_hour" hour.id %}'>Remove</a></td>
 									</tr>
-									
 									{% endfor %}
 								</tbody>
 							</table>
@@ -48,7 +47,7 @@
 									<div class="col-md-2">
 										{{form.is_closed}}
 									</div>
-
+									<input type="hidden" value='{% url "add_opening" %}' id='add_hour_url'>
 									<div class="col-md-2">
 										<button class='btn btn-success add_hour'>Add Hours</button>
 									</div>
