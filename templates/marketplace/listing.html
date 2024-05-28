@@ -47,9 +47,15 @@
                         /></a>
                       </figure>
                       {% endif %}
-                      <span class="restaurant-status close"
-                        ><em class="bookmarkRibbon"></em>Close</span
+                      {% if vendor.is_open %}
+                      <span class="restaurant-status oprn"
+                        ><em class="bookmarkRibbon"></em>Opne</span
                       >
+                      {% else %}
+                      <span class="restaurant-status close"
+                      ><em class="bookmarkRibbon"></em>Close</span
+                    >
+                      {% endif %}
                     </div>
                     <div class="text-holder">
                       <div class="post-title">

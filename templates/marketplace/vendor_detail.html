@@ -25,7 +25,7 @@
                                 {% endif %}
                             </div>
                             <div class="text-holder">
-                                <span class="restaurant-title">{{vendor.vendor_name}}</span>
+                                <span class="restaurant-title">{{vendor.vendor_name}} {% if not vendor.is_open %} [Closed] {% endif %}</span>
                                 <div class="text">
                                     {% if vendor.user_profile.address %}
                                     <i class="icon-location"></i>

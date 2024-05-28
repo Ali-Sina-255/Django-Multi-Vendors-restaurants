@@ -27,8 +27,10 @@
                                                 <div class="image-holder"><img src="{{item.food_item.image.url}}" alt=""></a></div>
                                                 <div class="text-holder">
                                                     <h6>{{item.food_item|truncatechars:35}} </h6>
-                                                    <a href="{% url 'vendor_detail' item.food_item.vendor.vendor_slug %}"><span class="badge badge-warning mt-2"  style='width: 130px;text-decration:none'>{{item.food_item.vendor}}</span></a>
+                                                   <p style='margin:0px'>{{item.food_item.description}}</p>
+                                                    <a href="{% url 'vendor_detail' item.food_item.vendor.vendor_slug %}" ><span class="badge badge-info" >{{item.food_item.vendor}}</span></a>
                                                 </div>
+
                                                 <div class="price-holder">
                                                     <span class="price">$ {{item.food_item.price}}</span>
                                                     <a href="#" class='decrease_cart'  data-id='{{item.food_item.id}}' id='{{item.id}}' data-url='{% url "decrease_cart" item.food_item.id %}' style='margin-right:28px'><i class="icon-minus text-color"></i></a>

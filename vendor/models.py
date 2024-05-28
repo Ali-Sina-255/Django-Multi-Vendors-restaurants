@@ -1,8 +1,7 @@
 from django.db import models
 from accounts.models import User, UserProfile
 from accounts.utils import send_notification
-from datetime import time
-
+from datetime import time, date, datetime
 
 class Vendor(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
@@ -16,6 +15,26 @@ class Vendor(models.Model):
 
     def __str__(self) -> str:
         return self.vendor_name 
+    
+    def is_open(self):
+        today_date = date.today()
+        today = today_date.isoweekday()
+        print(today)
+        current_opening_hours = OpeningHour.objects.filter(vendor=self,day=today)
+        now = datetime.now()
+        current_time = now.strftime('%H:%M:%S')
+        print(current_time)
+        is_open = None
+        for i in current_opening_hours:   
+            if not i.is_closed:
+                start_time = str(datetime.strptime(i.from_hour,"%I:%M %p").time())    
+                end_time =str(datetime.strptime(i.to_hour,"%I:%M %p").time())
+                if current_time > start_time  and current_time < end_time:
+                    is_open = True
+                    break
+                else:
+                    is_open = False  
+        return is_open
  
     def save(self,*args, **kwargs):
         if self.pk is not None:
@@ -37,19 +56,18 @@ class Vendor(models.Model):
     
 
 DAY_CHOICES = [
-    (1,"Saturday"),
-    (2,"Sunday"),
-    (3,"Monday"),
-    (4,"Tuesday"),
-    (5,"Wednesday"),
-    (6,"Thursday"),
-    (7,"Friday"),
-   
+    (1,"Monday"),
+    (2,"Tuesday"),
+    (3,"Wednesday"),
+    (4,"Thursday"),
+    (5,"Friday"),
+    (6,"Saturday"),
+    (7,"Sunday"),
 ]
-HOUR_OF_DAY_24 =  [(time(h,m).strftime('%I :%M %p'),time(h,m).strftime('%I:%M %p')) for h in range(0, 24) for m in range(0,31, 30)]
+HOUR_OF_DAY_24 =  [(time(h,m).strftime('%I:%M %p'),time(h,m).strftime('%I:%M %p')) for h in range(0, 24) for m in range(0,31, 30)]
 class OpeningHour(models.Model):
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
-    day  = models.IntegerField(choices=DAY_CHOICES, unique=True)
+    day  = models.IntegerField(choices=DAY_CHOICES)
     from_hour = models.CharField(choices=HOUR_OF_DAY_24, max_length=10, blank=True)
     to_hour = models.CharField(choices=HOUR_OF_DAY_24, max_length=10, blank=True)
     is_closed = models.BooleanField(default=False)

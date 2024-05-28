@@ -127,6 +127,11 @@
 		</div>
 	</div>
 	<!-- Top Restarurants Section End -->
+	<!-- Top Restarurants Section End -->
+
+
+			
+
 	<!-- Choose From Most Popular Listin Start -->
 	<div class="page-section nopadding cs-nomargin" style="margin-top: 0px;padding-top: 60px;padding-bottom: 50px;margin-bottom: 0px;background: #ffffff;">
 		<div class="container">
@@ -156,10 +161,17 @@
 										</figure>
 										{% endif %}
 
+										{% if vendor.is_open %}
+										<span class="restaurant-status open">
+											<em class="bookmarkRibbon"></em>Open
+										</span>
 
+										{% else %}
 										<span class="restaurant-status close">
 											<em class="bookmarkRibbon"></em>Close
 										</span>
+
+										{% endif %}
 									</div>
 									<div class="text-holder">
 										<div class="list-rating">
