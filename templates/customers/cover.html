@@ -1,6 +1,6 @@
 
 {% load static %}
-<div class="page-section restaurant-detail-image-section" style=" background: url('') no-repeat scroll 0 0 / cover;">
+<div class="page-section restaurant-detail-image-section" style=" background: url('{% if user_profile.cover_pic %} {{user_profile.cover_pic.url }}{% else %} {% static '/assets/images/default-cover.PNG' %} {% endif %}') no-repeat scroll 0 0 / cover;">
     <!-- Container Start -->
     <div class="container">
        <!-- Row Start -->
@@ -10,16 +10,21 @@
              <div class="company-info-detail">
                 <div class="company-info">
                    <div class="img-holder">
+
                       <figure>
-                         <img src="{% static 'assets/extra-images/listing-logo18.png' %}" alt="">
+                        {% if user_profile.profile_pic %}
+                         <img src="{{user_profile.profile_pic.url}}" alt="">
+                         {% else %}
+                         <img src="{% static '/assets/images/cs-default.jpg' %}" alt="">
+                         {% endif %}
                       </figure>
                    </div>
 
                    <div class="text-holder">
-                      <span class="restaurant-title">Ali Sultani </span>
+                      <span class="restaurant-title">{{user.first_name}} {{user.last_name}} </span>
                       <div class="text">
                          <i class="icon-location"></i>
-                         <p>+93707323964</p>
+                         <p>{{user.phone_number}}</p>
                       </div>
                    </div>
                 </div>

@@ -28,7 +28,7 @@
                                                 <div class="text-holder">
                                                     <h6>{{item.food_item|truncatechars:35}} </h6>
                                                    <p style='margin:0px'>{{item.food_item.description}}</p>
-                                                    <a href="{% url 'vendor_detail' item.food_item.vendor.vendor_slug %}" ><span class="badge badge-info" >{{item.food_item.vendor}}</span></a>
+                                                    <a href="{% url 'vendor_detail' item.food_item.vendor.vendor_slug %}" ><span class="badge badge-info" style='color:white;width: 150px;'>{{item.food_item.vendor}}</span></a>
                                                 </div>
 
                                                 <div class="price-holder">
