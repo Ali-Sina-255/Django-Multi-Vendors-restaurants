@@ -27,8 +27,8 @@
                                                 <div class="image-holder"><img src="{{item.food_item.image.url}}" alt=""></a></div>
                                                 <div class="text-holder">
                                                     <h6>{{item.food_item|truncatechars:35}} </h6>
-                                                   <p style='margin:0px'>{{item.food_item.description}}</p>
-                                                    <a href="{% url 'vendor_detail' item.food_item.vendor.vendor_slug %}" ><span class="badge badge-info" style='color:white;width: 150px;'>{{item.food_item.vendor}}</span></a>
+                                                   <p style='margin:0px'>{{item.food_item.description|truncatechars:50}}</p>
+                                                    <a href="{% url 'vendor_detail' item.food_item.vendor.vendor_slug %}" ><span class="badge badge-warning" style='color:white;width: 180px;text-decoration:none'>{{item.food_item.vendor}}</span></a>
                                                 </div>
 
                                                 <div class="price-holder">
@@ -78,13 +78,7 @@
                                                     <span id='subtotal'>{{subtotal}}</span>
                                                 </span>
                                             </li>
-                                            <li style='list-style-type: none;'>
-                                                Tex
-                                                <span class="price float-right">
-                                                    <span class='currency'>$</span>
-                                                    <span id='total'>{{total}}</span>
-                                                </span>
-                                            </li>
+                                           
                                             <li style='list-style-type: none;'>
                                                 Total
                                                 <span class="price float-right font-weigth:600">
@@ -92,6 +86,7 @@
                                                     <span id='grand_total'>{{grand_total}}</span>
                                                 </span>
                                             </li>
+                                            <a href="{% url 'checkout' %}" class='btn btn-danger w-100 p-2 mt-3'>PROCEED OT CHECHKOUT</a>
                                         </ul>
                                     </div>
                                 </div>

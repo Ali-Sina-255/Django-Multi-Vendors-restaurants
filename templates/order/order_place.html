@@ -1,0 +1,75 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<!-- Main Section Start -->
+<div class="main-section pt-5">
+  <div class="page-section">
+    <div class="container pt-5">
+      <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+          <div class="tabs-holder horizontal">
+            <ul class="stickynav-tabs nav nav-tabs">
+              <li class="active">
+                <a data-toggle="tab" href="#home"
+                  ><i class="fa fa-shopping-cart text-danger"></i>Review Your
+                  Billing address
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div id="home" class="tab-pane in active">
+                <div class="menu-itam-holder">
+                  <div id="menu-item-list-6272" class="menu-itam-list"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% comment %} Order {% endcomment %}
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+          <div class="tabs-holder horizontal">
+            <ul class="stickynav-tabs nav nav-tabs">
+              <li class="active">
+                <a data-toggle="tab" href="#home"
+                  ><i class="icon- icon-room_service"></i>Your Order</a
+                >
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              <div id="home" class="tab-pane in active">
+                <div class="menu-itam-holder">
+                  <div class="">
+                    <ul>
+                      <li style="list-style-type: none">
+                        Subtotal
+                        <span class="price float-right">
+                          <span class="currency">$</span>
+                          <span id="subtotal">{{subtotal}}</span>
+                        </span>
+                      </li>
+
+                      <li style="list-style-type: none">
+                        Total
+                        <span class="price float-right font-weigth:600">
+                          <span class="currency">$</span>
+                          <span id="grand_total">{{grand_total}}</span>
+                        </span>
+                      </li>
+                      <a
+                        href="{% url 'checkout' %}"
+                        class="btn btn-danger w-100 p-2 mt-3"
+                        >PROCEED OT CHECHKOUT</a
+                      >
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Main Section End -->
+
+{% endblock content %}

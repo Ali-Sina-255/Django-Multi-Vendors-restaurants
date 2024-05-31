@@ -1,11 +1,13 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Prefetch
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 
+from accounts.models import UserProfile
 from menu.models import Category, FootItem
 from vendor.models import Vendor, OpeningHour
 from marketplace.models import Cart
+from orders.forms import OrderForms
 from . context_processors import get_cart_counter, get_cart_amounts  
 from datetime import datetime, date, time
 
@@ -102,9 +104,7 @@ def decrease_cart_view(request, food_id):
                 
             except:
                 return JsonResponse({"status":"Failed", 'message':'this food does not exist!'})
-
         else:
-
             return JsonResponse({"status":"Failed","message":"Invalid Request"})
     
     return JsonResponse({'status':"login_required", 'message':'Please login to continue'})
@@ -117,7 +117,7 @@ def cart_view(request):
 
 @login_required(login_url='login')
 def delete_cart_view(request, cart_id):
-     if request.user.is_authenticated:
+    if request.user.is_authenticated:
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             try:
                 cart_item = Cart.objects.get(user=request.user, id=cart_id)
@@ -126,12 +126,33 @@ def delete_cart_view(request, cart_id):
                     return JsonResponse({"status":"success","message":"cart item has been deleted","cart_counter":get_cart_counter(request),"cart_amount":get_cart_amounts(request)})
             except:
                 return JsonResponse({"status":"Failed", 'message':'this food does not exist!'})
-
         else:
             return JsonResponse({"status":"Failed","message":"Invalid Request"})
         
 
-
-
 def search_view(request):
     return HttpResponse("search")
+
+def checkout_view(request):
+    cart_item = Cart.objects.filter(user=request.user)
+    cart_count = cart_item.count()
+    if cart_count <= 0:
+        return redirect('marketplace')
+    
+    user_profile = UserProfile.objects.get(user=request.user)
+    default_value = {
+        "first_name":request.user.first_name,
+        "last_name":request.user.last_name,
+        "phone_number": request.user.phone_number,
+        "email":request.user.email,
+        "address":user_profile.address,
+        'country':user_profile.country,
+        "state": user_profile.state,
+        "city":user_profile.city
+    }
+    form = OrderForms(initial=default_value)
+    context = {
+        "form":form,
+        "cart_item":cart_item
+    }
+    return render(request, 'marketplace/checkout.html',context)
