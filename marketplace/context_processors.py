@@ -12,10 +12,8 @@ def get_cart_counter(request):
                     cart_count += cart_item.quantity
             else:
                 cart_count = 0
-
         except:
             cart_count = 0
-
     return dict(cart_count=cart_count)
 
 def get_cart_amounts(request):
