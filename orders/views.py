@@ -5,6 +5,8 @@ from marketplace.context_processors import get_cart_amounts
 
 from . forms import OrderForms
 from . models import Order
+from . utils import generate_order_number
+import simplejson
 
 # Create your views here.
 def order_place_view(request):
@@ -15,7 +17,6 @@ def order_place_view(request):
     
     subtotal = get_cart_amounts(request)['subtotal']
     grand_total = get_cart_amounts(request)['grand_total']
-    tax_data = get_cart_amounts(request)['']
     if request.method == "POST":
         form = OrderForms(request.POST)
         if form.is_valid():
@@ -31,12 +32,16 @@ def order_place_view(request):
             order.total = grand_total
             order.tax_data = tax_data
             order.payment_method = request.POST['payment_method']
-            order.order_number = '255'
             order.save()
+            order.order_number = generate_order_number(order.id)
             messages.success(request, 'your order is send successfully')
             return redirect('place_order')
+            
         else:
             print(form.errors)
             messages.error(request, 'your order is not send successfully!')
     print(subtotal,grand_total)
-    return render(request, 'order/order_place.html')
+    context = {
+        "order":order,
+    }
+    return render(request, 'order/order_place.html', context)
