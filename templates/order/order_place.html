@@ -25,11 +25,11 @@
                       <div>{{order.address}}</div>
                       <div>{{order.countery}}</div>
                       <div>{{order.state}}, {{order.city}}</div>
-                      <div><b>Phone Number :</b>{{order.phone}}</div>
+                      <div><b>Phone Number :</b>{{order.phone_number}}</div>
                       <div><b>Email Address : </b>{{order.email}}</div>
                       <div><b>Payment Method : </b>{{order.payment_method}}</div>
                       <br>
-                      <a href="{% url 'checkout' %}" class='btn btn-outline-danger'>Edite</a>
+                      <a href="{% url 'checkout' %}" class='btn btn-outline-danger mb-4'>Edite</a>
                     </div>
                   </div>
                 </div>
@@ -51,16 +51,21 @@
             <div class="tab-content">
               <div id="home" class="tab-pane in active">
                 <div class="menu-itam-holder">
-                  <table class="table">
-                    <tbody>
-                      {% for item in cart_items %}
-                      <tr>
-                       <th><img src="{{item.food_item.images.url}}" alt="Food Images" width='40' srcset=""></th>
-                      </tr>
-                      {% endfor %}
-                    </tbody>
+                  
+                  <div>
+                    <table class="table">
+                      <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                        <td><img src="{{item.food_item.image.url}}" alt="Food Images" width='40' srcset=""></td>
+                        <td>{{item.food_item|truncatechars:15}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>${{item.food_item.price}}</td>
+                       </tr>
+
+                        {% endfor %}
+                      </tbody>
                   </table>
-                  <div class="">
                     <ul>
                       <li style="list-style-type: none">
                         Subtotal

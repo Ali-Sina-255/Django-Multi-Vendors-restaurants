@@ -24,7 +24,7 @@ class Order(models.Model):
         ("Cancelled","Cancelled"),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    payment = models.ForeignKey(Payment, on_delete=models.CASCADE)
+    payment = models.ForeignKey(Payment, on_delete=models.CASCADE,null=True, blank=True)
     order_number = models.CharField(max_length=50)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -35,7 +35,6 @@ class Order(models.Model):
     state = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     total = models.FloatField()
-    tax_data = models.JSONField(blank=True, help_text='Data Format:{"tax_type":{"tax_percentage":"tax_amount"}}')
     payment_method = models.CharField(max_length=200)
     status = models.CharField(choices=STATUS,max_length=30,default='New')
     is_order = models.BooleanField(default='False')

@@ -1,6 +1,8 @@
 import datetime
 
-def generate_order_number(pk):
-    current_datetime = datetime.datetime.now().strftime('%Y%m%d%H%M')
-    order_number = current_datetime + pk
+
+def generate_order_num(pk):
+    current_data = datetime.datetime.now().strftime('%Y%m%d%H%M')
+    order_number = current_data + str(pk)
     return order_number
+

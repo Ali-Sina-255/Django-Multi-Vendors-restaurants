@@ -39,7 +39,6 @@ def user_registration(request):
             email = form.cleaned_data['email']
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-
             user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
@@ -53,7 +52,6 @@ def user_registration(request):
             mail_subject = 'Please Activate your Registration'
             email_template = 'account/email/verification_email.html'
             send_verification_email(request, user, mail_subject, email_template)
-
             messages.success(request, 'Your registration was successfully')
             return redirect('home')
         else:
