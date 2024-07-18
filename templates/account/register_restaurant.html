@@ -1,128 +1,192 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<!-- Main Section Start -->
-  <div class="main-section">
-    <div class="page-section nopadding cs-nomargin" style="margin-top: 0px;padding-top: 60px;padding-bottom: 60px;margin-bottom: 0px;">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-            <div class="user-dashboard loader-holder">
-              <div class="user-holder">
-                          <h4 class="text-center" style="margin-bottom: 0;">PARTENER WITH FOODONLINE</h4>
-                          <p class="text-center">Register your restaurant with foodonline marketplace and get more customer.</p>
-                          <hr>
-                          
-                          <div id="restaurant-sets-holder">
-                          
-                              <form class="form-fields-set foodbakery-dev-restaurant-form" action="{% url 'register_vendor' %}" method="POST" enctype="multipart/form-data">
-                                  {% csrf_token %}
-                                  <ul class="register-add-restaurant-tab-container restaurant-information-tab-container">
-                                      <li>
-                                          <div class="row">
-                                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                  <div class="row">
-      
-                                                      <ul >
-                                                          <li>
-                                                              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                  <div class="field-holder">
-                                                                      <label>First name</label>
-                                                                      {{form.first_name}}
-                                                                    </div>
-                                            
-                                                              </div>
-                                                              
-                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                              <div class="field-holder">
-                                                                  <label>Last Name</label>
-                                                                  {{form.last_name}}
-                                                                </div>
-                                                              </div>
-                                                              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                <div class="field-holder">
-                                                                    <label>Restaurant Name</label>
-                                                                    {{vendor_form.vendor_name}}
-                                                                  </div>
-                                                                </div>
+<!-- Main Section Start -->
+<div class="main-section">
+    <div class="page-section nopadding cs-nomargin"
+         style="margin-top: 0px;padding-top: 60px;padding-bottom: 60px;margin-bottom: 0px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                    <div class="user-dashboard loader-holder">
+                        <div class="user-holder">
+                            <h4 class="text-center" style="margin-bottom: 0;">PARTENER WITH FOODONLINE</h4>
+                            <p class="text-center">Register your restaurant with foodonline marketplace and get more
+                                customer.</p>
+                            <hr>
 
+                            <div id="restaurant-sets-holder">
+
+                                <form class="form-fields-set foodbakery-dev-restaurant-form"
+                                      action="{% url 'register_vendor' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <ul class="register-add-restaurant-tab-container restaurant-information-tab-container">
+                                        <li>
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="row">
+                                                        <ul>
+                                                            <li>
                                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                                     <div class="field-holder">
-                                                                        <label>Restaurant License </label>
-                                                                        {{vendor_form.vendor_licenses}}
-
-                                                                        <small>{{vendor_form.vendor_licenses.errors}}</small>
-                                                                      </div>
-
-                                                                    <small>{{vendor_form.vendor_licenses.errors}}</small>
+                                                                        <label>First name</label>
+                                                                        {{ form.first_name }}
+                                                                        {% if form.first_name.errors %}
+                                                                        <ul class="errorlist" style="color: red;">
+                                                                            {% for error in form.first_name.errors %}
+                                                                            <li>{{ error }}</li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                        {% endif %}
                                                                     </div>
-                                                              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                  <div class="field-holder">
-                                                                      <label>Email Address</label>
-                                                                      {{form.email}}
-                                                                  </div>
-                                                              </div>
-                                                              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                                  <div class="field-holder">
-                                                                      <label>Username</label>{{form.username}}
-                                                                  </div>
-                                                              </div>
-                                                          </li>
-                                                          
-                                                          <li>
-                                                              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                                  <div class="field-holder">
-                                                                      <label>Password</label>
-                                                                      {{form.password}}
-                                                                  </div>
-                                                              </div>
-                                                              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                                  <div class="field-holder">
-                                                                      <label>Confirm Password</label>
-                                                                      {{form.confirm_password}}
-                                                                  </div>
-                                                              </div>
-                                                          </li>
-                                                      </ul>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                      </li>
-                                      <li>
-                                        <ul class='errorlist'>
-                                          {% for field in form %}
-                                            {% if field.errors %}
-                                              {% for error in field.errors %}
-                                              <li style="color: red;">{{ error }}</li>
-                                              {% endfor %}
-                                            {% endif %}
-                                          {% endfor %}
-                                          <li style='color:red'>{{form.non_field_errors}}</li>
-                                        </ul>
-                                          <div class="row">
-                                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                  <div class="field-holder">
-                                                      <div class="payment-holder">
-                                                          <input type="submit" value="Submit" id="btn-next-restaurant-information" class="bgcolor">
-                                                      </div>
-                                                  </div>
-                                              </div>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    <div class="field-holder">
+                                                                        <label>Last Name</label>
+                                                                        {{ form.last_name }}
+                                                                        {% if form.last_name.errors %}
+                                                                        <ul class="errorlist" style="color: red;">
+                                                                            {% for error in form.last_name.errors %}
+                                                                            <li>{{ error }}</li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    <div class="field-holder">
+                                                                        <label>Restaurant Name</label>
+                                                                        {{ vendor_form.vendor_name }}
+                                                                        {% if vendor_form.vendor_name.errors %}
+                                                                        <ul class="errorlist" style="color: red;">
+                                                                            {% for error in vendor_form.vendor_name.errors %}
+                                                                            <li>{{ error }}</li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    <div class="field-holder">
+                                                                        <label>Restaurant License</label>
+                                                                        {{ vendor_form.vendor_licenses }}
+                                                                        {% if vendor_form.vendor_licenses.errors %}
+                                                                        <ul class="errorlist" style="color: red;">
+                                                                            {% for error in vendor_form.vendor_licenses.errors %}
+                                                                            <li>{{ error }}</li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    <div class="field-holder">
+                                                                        <label>Email Address</label>
+                                                                        {{ form.email }}
+                                                                        {% if form.email.errors %}
+                                                                        <ul class="errorlist" style="color: red;">
+                                                                            {% for error in form.email.errors %}
+                                                                            <li>{{ error }}</li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                                    <div class="field-holder">
+                                                                        <label>Username</label>
+                                                                        {{ form.username }}
+                                                                        {% if form.username.errors %}
+                                                                        <ul class="errorlist" style="color: red;">
+                                                                            {% for error in form.username.errors %}
+                                                                            <li>{{ error }}</li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                                    <div class="field-holder">
+                                                                        <label>Password</label>
+                                                                        {{ form.password }}
+                                                                        {% if form.password.errors %}
+                                                                        <ul class="errorlist" style="color: red;">
+                                                                            {% for error in form.password.errors %}
+                                                                            <li>{{ error }}</li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                                    <div class="field-holder">
+                                                                        <label>Confirm Password</label>
+                                                                        {{ form.confirm_password }}
+                                                                        {% if form.confirm_password.errors %}
+                                                                        <ul class="errorlist" style="color: red;">
+                                                                            {% for error in form.confirm_password.errors %}
+                                                                            <li>{{ error }}</li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <ul class="errorlist">
+                                                {% for field in form %}
+                                                {% if field.errors %}
+                                                <li>
+                                                    {{ field.label }}:
+                                                    <ul class="errorlist" style="color: red;">
+                                                        {% for error in field.errors %}
+                                                        <li>{{ error }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </li>
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% if form.non_field_errors %}
+                                                <li style="color:red;">
+                                                    {% for error in form.non_field_errors %}
+                                                    {{ error }}<br>
+                                                    {% endfor %}
+                                                </li>
+                                                {% endif %}
+                                            </ul>
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="field-holder">
+                                                        <div class="payment-holder">
+                                                            <input type="submit" value="Submit"
+                                                                   id="btn-next-restaurant-information" class="bgcolor">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                {% comment %} Load Messages {% endcomment %}
+                                                {% include 'includes/messages.html' %}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </form>
 
-                                          </div>
-                                          <div class="row">
-                                            {% comment %} Load Messages {% endcomment %}
-                                            {% include 'includes/messages.html' %}
-                                          </div>
-                                      </li>
-                                  </ul>
-                              </form>
-                          </div>
-                      </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-  <!-- Main Section End -->
+</div>
+<!-- Main Section End -->
 {% endblock %}

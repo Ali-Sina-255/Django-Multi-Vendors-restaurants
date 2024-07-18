@@ -21,10 +21,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
+    "rest_framework",
+    "django_htmx",
     "FoodOnline.apps.FoodonlineConfig",
-    'accounts.apps.AccountsConfig',
-    'vendor.apps.VendorConfig',
+    "accounts.apps.AccountsConfig",
+    "vendor.apps.VendorConfig",
     "menu.apps.MenuConfig",
     "marketplace.apps.MarketplaceConfig",
     "customers.apps.CustomersConfig",
@@ -39,6 +40,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -46,7 +48,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -75,7 +77,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = "accounts.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -110,14 +112,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / "static"
 
-STATICFILES_DIRS = [
-    'config/static'
-]
+STATICFILES_DIRS = ["config/static"]
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media/'
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -127,10 +127,18 @@ MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
 
-# Email configration settings
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'alisinasultani255@gmail.com'
-EMAIL_HOST_PASSWORD = 'hjnn nsqr ywrg qfzo'
+# Email configuration settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "alisinasultani255@gmail.com"
+EMAIL_HOST_PASSWORD = "unfi sbic ayqo jmax"
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'foodOnline Marketplace<alisultani255@gmail.com>'
+DEFAULT_FROM_EMAIL = "foodOnline Marketplace<alisultani255@gmail.com>"
+
+# settings.py
+
+
+# EMAIL_USE_TLS = True  # For Gmail, use TLS; for other providers, adjust accordingly
+# EMAIL_HOST_USER = 'your_email@gmail.com'
+# EMAIL_HOST_PASSWORD = 'your_password'

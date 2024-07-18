@@ -93,6 +93,7 @@ def add_category(request):
             print(form.errors)
     else:
         form = CategoryForm()
+
     context = {
         'form': form
     }
@@ -123,6 +124,7 @@ def edit_category(request, pk):
             return redirect('edit_category')
     else:
         form = CategoryForm(instance=category)
+
     context = {
         "form":form, 
         "category": category
@@ -143,7 +145,7 @@ def delete_category(request, pk):
 @user_passes_test(check_rol_vendor)
 def add_food_view(request):
     if request.method == 'POST':
-        form =FoodItemForm(request.POST, request.FILES)
+        form = FoodItemForm(request.POST, request.FILES)
         if form.is_valid():
             food_title = form.cleaned_data['food_title']
             food = form.save(commit=False)
@@ -158,6 +160,7 @@ def add_food_view(request):
             return redirect('add_food')
     else:
         form = FoodItemForm()
+        form.fields['category'].queryset = Category.objects.filter(vendor=get_vendor(request))
     context = {"form":form}
     return render(request, 'vendor/add_food.html',context)
 
@@ -182,6 +185,8 @@ def edit_food_view(request, pk=None):
             return redirect("edit_food", food.id)
     else:
         form = FoodItemForm(instance=food)
+        form.fields['category'].queryset = Category.objects.filter(vendor=get_vendor(request))
+
 
     context = {
         "food": food,
@@ -198,7 +203,6 @@ def delete_food_view(request,pk):
        food.delete()
        messages.success(request, 'Food Item has been deleted successfully')
        return redirect('food_items_by_category', food.category.id)
-   
 
 def opening_hours_view(request):
     opening_hours = OpeningHour.objects.filter(vendor=get_vendor(request))
@@ -238,4 +242,5 @@ def remove_opening_hour_view(request, pk=None):
             hour = get_object_or_404(OpeningHour, pk=pk)
             hour.delete()
             return JsonResponse({'status':'success', 'id':pk})
+
 

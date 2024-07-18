@@ -5,14 +5,14 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 class UserManager(BaseUserManager):
     def create_user(self, first_name, last_name, username, email, password=None):
         if not email:
-            raise ValueError('User must have an email address!')
+            raise ValueError("User must have an email address!")
         if not username:
             raise ValueError("User must have and username!")
         user = self.model(
             email=self.normalize_email(email),
             username=username,
             first_name=first_name,
-            last_name=last_name
+            last_name=last_name,
         )
         user.set_password(password)
         user.save()
@@ -24,7 +24,7 @@ class UserManager(BaseUserManager):
             username=username,
             password=password,
             first_name=first_name,
-            last_name=last_name
+            last_name=last_name,
         )
         user.is_admin = True
         user.is_active = True
@@ -37,10 +37,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     VENDOR = 1
     CUSTOMER = 2
-    ROLE_CHOICES = (
-        (VENDOR, 'Restaurant'),
-        (CUSTOMER, 'Customer')
-    )
+    ROLE_CHOICES = ((VENDOR, "Restaurant"), (CUSTOMER, "Customer"))
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     username = models.CharField(max_length=255, unique=True)
@@ -57,8 +54,8 @@ class User(AbstractBaseUser):
     is_superadmin = models.BooleanField(default=False)
 
     # FOR LOGIN USER WITH THIS FIELD
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
     objects = UserManager()
 
@@ -81,8 +78,10 @@ class User(AbstractBaseUser):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
-    profile_pic = models.ImageField(upload_to='user/profile_picture', blank=True, null=True)
-    cover_pic = models.ImageField(upload_to='user/cover_picture', blank=True, null=True)
+    profile_pic = models.ImageField(
+        upload_to="user/profile_picture", blank=True, null=True
+    )
+    cover_pic = models.ImageField(upload_to="user/cover_picture", blank=True, null=True)
     address = models.CharField(max_length=200, null=True, blank=True)
     country = models.CharField(max_length=100, null=True, blank=True)
     state = models.CharField(max_length=100, null=True, blank=True)

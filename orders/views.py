@@ -4,9 +4,9 @@ from marketplace.models import Cart
 from marketplace.context_processors import get_cart_amounts
 
 from . forms import OrderForms
-from . models import Order
+from . models import Order, Payment
 from . utils import generate_order_num
-import simplejson
+
 
 
 # Create your views here.
@@ -54,8 +54,27 @@ def order_place_view(request):
  
 def payment(request):
     # if the request is ajax or not 
-    # store the payment detail in the payment model 
-    pass
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        order_number = request.POST.get('order_number')
+        transaction_id = request.POST.get('transaction_id')
+        payment_method = request.POST.get('payment_method')
+        status = request.POST.get('status')
 
+        order = Order.objects.get(user=request.user, order_number=order_number)
+        payment = Payment.objects.get(user=request.user,
+                                      transaction_id=transaction_id,
+                                      payment_method = payment_method,
+                                      amount = order.id,
+                                      status = status
+                                      )
+        payment.save()
+        # update the order 
+        order.payment = payment
+        order.is_order = True
+        order.save()
+
+        # store the payment detail in the payment model 
+        # update the order model 
+        # movie the cart item to order food model 
 
     
