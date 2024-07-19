@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    'django_filters',
     "django_htmx",
     "FoodOnline.apps.FoodonlineConfig",
     "accounts.apps.AccountsConfig",
