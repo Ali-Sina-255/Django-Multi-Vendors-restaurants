@@ -3,15 +3,26 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.mixins import CreateModelMixin
+
 from menu.models import Category, FootItem
 from vendor.models import Vendor
 from accounts.models import User, UserProfile
-from . serializers import CategorySerializer, FoodItemSerializer, UserSerializer, UserProfileSerializer, VendorSerializer
-from .filters import CategoryFilter, UserFilterClass, FoodItemFilterClass, VendorFilterClass
-from .pagination import DefaultPaginationClass
+from marketplace.models import Cart
+from . serializers import CategorySerializer, FoodItemSerializer, UserSerializer, UserProfileSerializer, VendorSerializer, CartSerializer
+from .filters import CategoryFilter, UserFilterClass, FoodItemFilterClass, VendorFilterClass, CartFilter
+from .pagination import DefaultPaginationClass, CartItemPaginationClass
 
 
+class CartApiViewSet(ModelViewSet):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+    pagination_class = CartItemPaginationClass
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = CartFilter
+    search_fields = ['food_item']
+    ordering_fields = ["food_item","updated_at"]
 
 
 class CategoryApiViewSet(ModelViewSet):

@@ -9,4 +9,5 @@ router.register('user', views.UserApiViewSet)
 router.register('category', views.CategoryApiViewSet)
 router.register('food-item', views.FoodItemApiViewSet)
 router.register('vendor', views.VendorApiViewSet)
+router.register('cart', views.CartApiViewSet)
 urlpatterns = router.urls

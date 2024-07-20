@@ -2,8 +2,13 @@ from django_filters import FilterSet
 from accounts.models import User
 from menu.models import Category , FootItem
 from vendor.models import Vendor
+from marketplace.models import Cart
 
 
+class CartFilter(FilterSet):
+    class Meta:
+        model = Cart
+        fields = {'user':["exact"],"food_item":['exact']}
 class CategoryFilter(FilterSet):
     class Meta:
         model = Category

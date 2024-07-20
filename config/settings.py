@@ -1,7 +1,7 @@
 from pathlib import Path
 from decouple import config
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -129,6 +129,7 @@ MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # Email configuration settings
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')
@@ -141,3 +142,11 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 # EMAIL_USE_TLS = True  # For Gmail, use TLS; for other providers, adjust accordingly
 # EMAIL_HOST_USER = 'your_email@gmail.com'
 # EMAIL_HOST_PASSWORD = 'your_password'
+REST_FRAMEWORK = {
+    "COERCE_DECIMAL_TO_STRING": False,
+    # for apply every where pagination
+
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ),
+}

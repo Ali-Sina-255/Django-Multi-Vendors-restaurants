@@ -18,7 +18,7 @@ from menu.models import FootItem
 
 
 def get_vendor(request):
-    vendor = Vendor.objects.get(user = request.user)
+    vendor = Vendor.objects.get(user=request.user)
     return vendor
 
 @login_required(login_url='login')

@@ -2,6 +2,8 @@ from menu.models import Category, FootItem
 from rest_framework import serializers
 from accounts.models import User, UserProfile
 from vendor.models import Vendor
+from marketplace.models import Cart
+from django.db.models import Sum, F
 
 
 class VendorSerializer(serializers.ModelSerializer):
@@ -19,6 +21,8 @@ class VendorSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    
+    vendor = VendorSerializer()
     class Meta:
         model = Category
         fields = [
@@ -62,3 +66,24 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = "__all__"
+
+
+class CartSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    food_item = FoodItemSerializer()
+    total_food_items = serializers.SerializerMethodField()
+    total_price = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cart
+        fields = ['user', 'food_item', 'quantity', 'updated_at', 'total_food_items', 'total_price']
+
+    def get_total_food_items(self, obj):
+        total_food_items = Cart.objects.aggregate(total_items=Sum('quantity'))['total_items']
+        return total_food_items
+
+    def get_total_price(self, obj):
+        total_price = Cart.objects.aggregate(
+            total_price=Sum(F('quantity') * F('food_item__price'))
+        )['total_price']
+        return total_price
