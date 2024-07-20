@@ -21,6 +21,8 @@ def get_vendor(request):
     vendor = Vendor.objects.get(user=request.user)
     return vendor
 
+
+
 @login_required(login_url='login')
 @user_passes_test(check_rol_vendor)
 def vendor_profile(request):
