@@ -22,7 +22,7 @@ class VendorSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     
-    vendor = VendorSerializer()
+    vendor = VendorSerializer(read_only=True)
     class Meta:
         model = Category
         fields = [
@@ -37,7 +37,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class FoodItemSerializer(serializers.ModelSerializer):
-    vendor = VendorSerializer()
+    vendor = VendorSerializer(read_only=True)
     category = CategorySerializer()
 
     class Meta:

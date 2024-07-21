@@ -3,6 +3,7 @@ from .models import Vendor, OpeningHour
 
 
 class VendorAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("vendor_name",)}
     list_display = ('user', 'vendor_name', 'is_approved', 'created_on')
     list_display_links = ('user', 'vendor_name')
     list_editable  = ('is_approved',)
