@@ -21,38 +21,24 @@ class VendorSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    
-    vendor = VendorSerializer(read_only=True)
     class Meta:
         model = Category
-        fields = [
-            "id",
-            "vendor",
-            "category_name",
-            "slug",
-            "description",
-            "created_at",
-            "updated_at",
-        ]
-
+        fields = ['vendor', 'category_name', 'slug', 'description', 'created_at', 'updated_at']
 
 class FoodItemSerializer(serializers.ModelSerializer):
-    vendor = VendorSerializer(read_only=True)
     category = CategorySerializer()
 
     class Meta:
         model = FootItem
-        fields = [
-            "food_title",
-            "description",
-            "price",
-            "vendor",
-            "category",
-            "image",
-            "is_available",
-            "created_at",
-            "updated_at",
-        ]
+        fields = ['vendor', 'category', 'food_title', 'description', 'price', 'image', 'is_available', 'created_at', 'updated_at']
+
+    def create(self, validated_data):
+        category_data = validated_data.pop('category')
+        vendor = validated_data.get('vendor')  # Get the vendor from the FoodItem
+        category_data['vendor'] = vendor  # Set the vendor for the Category
+        category, created = Category.objects.get_or_create(**category_data)
+        food_item = FootItem.objects.create(category=category, **validated_data)
+        return food_item
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -69,7 +55,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = UserSerializer(read_only=True)
     food_item = FoodItemSerializer()
     total_food_items = serializers.SerializerMethodField()
     total_price = serializers.SerializerMethodField()
