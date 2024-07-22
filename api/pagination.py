@@ -6,4 +6,4 @@ class DefaultPaginationClass(PageNumberPagination):
     page_size = 4
     
 class CartItemPaginationClass(PageNumberPagination):
-    page_size = 3
+    page_size = 4

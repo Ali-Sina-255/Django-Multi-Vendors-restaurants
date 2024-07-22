@@ -84,3 +84,17 @@ class OpeningHour(models.Model):
 
     def __str__(self) -> str:
         return self.get_day_display()
+
+
+class ReviewRatting(models.Model):
+    vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    subject  = models.CharField(max_length=255)
+    review = models.TextField()
+    ratting = models.FloatField()
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self) -> str:
+        return self.subject

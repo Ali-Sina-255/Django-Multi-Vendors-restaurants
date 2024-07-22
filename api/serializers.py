@@ -22,6 +22,7 @@ class VendorSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+   
     class Meta:
         model = Category
         fields = ['vendor', 'category_name', 'slug', 'description', 'created_at', 'updated_at']
