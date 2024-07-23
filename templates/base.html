@@ -50,7 +50,8 @@
     <script src="{% static 'assets/js/bootstrap.js' %}"></script>
     <script src="{% static 'assets/js/custom.js' %}"></script>
   <!-- Include the PayPal JavaScript SDK -->
-  <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&currency=USD"></script>
+  {% comment %} <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&currency=USD"></script> {% endcomment %}
+  <script src="https://www.paypal.com/sdk/js?client-id={{PAYPAL_CLIENT_ID}}"></script>
 
     <style>
       body,

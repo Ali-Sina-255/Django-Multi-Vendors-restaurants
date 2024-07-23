@@ -20,3 +20,9 @@ def get_user_profile(request):
 
 def get_paypal_client_id(request):
     return {"PAYPAL_CLIENT_ID": settings.PAYPAL_CLIENT_ID}
+
+
+
+
+# myapp/middlewares.py
+
