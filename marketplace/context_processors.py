@@ -1,5 +1,6 @@
 from . models import Cart
 from menu.models  import FootItem
+from django.conf import settings
 
 
 def get_cart_counter(request):
@@ -27,3 +28,5 @@ def get_cart_amounts(request):
             subtotal += (food_item.price * item.quantity)
         grand_total  = subtotal + tex
     return dict(subtotal=subtotal, tex=tex, grand_total=grand_total)
+
+

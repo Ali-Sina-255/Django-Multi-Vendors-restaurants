@@ -25,7 +25,6 @@ def marketplace_view(request):
 
 
 def vendor_detail(request, vendor_slug):
-    
     vendor = get_object_or_404(Vendor, vendor_slug=vendor_slug)
     categories = Category.objects.filter(vendor=vendor).prefetch_related(
         Prefetch("fooditems",

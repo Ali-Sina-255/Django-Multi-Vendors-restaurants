@@ -20,6 +20,6 @@ urlpatterns = [
     path('opening_hours/', views.opening_hours_view, name='opening_hours'),
     path('opening_hours/add/', views.add_opening_hour_view, name='add_opening'),
     path('opening_hours/remove/<int:pk>/', views.remove_opening_hour_view, name='remove_hour'),
+    path('review/<int:restaurant_id>/', views.review_view, name='reviews')
     
-    
-]  
+]   

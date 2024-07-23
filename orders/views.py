@@ -26,7 +26,7 @@ def order_place_view(request):
             order.first_name = form.cleaned_data['first_name']
             order.last_name = form.cleaned_data['last_name']
             order.phone_number = form.cleaned_data['phone_number']
-            order.email= form.cleaned_data['email']
+            order.email = form.cleaned_data['email']
             order.address = form.cleaned_data['address']
             order.country = form.cleaned_data['country']
             order.state = form.cleaned_data['state']

@@ -111,9 +111,9 @@
 							<li class="has-border">
 								<figure>
 									{% if vendor.user_profile.profile_pic %}
-									<a href="#"><img src="{{vendor.user_profile.profile_pic.url}}" alt=""></a>
+									<a href="{% url 'vendor_detail' vendor.vendor_slug %}"><img src="{{vendor.user_profile.profile_pic.url}}" alt=""></a>
 									{% else %}
-									<a href="#"><img src="{%  static 'assets/images/default-profile.PNG' %}" alt=""></a>
+									<a href="{% url 'vendor_detail' vendor.vendor_slug %}"><img src="{%  static 'assets/images/default-profile.PNG' %}" alt=""></a>
 									{% endif %}
 								</figure>
 							</li>
@@ -127,11 +127,8 @@
 		</div>
 	</div>
 	<!-- Top Restarurants Section End -->
-	<!-- Top Restarurants Section End -->
 
-
-			
-
+	
 	<!-- Choose From Most Popular Listin Start -->
 	<div class="page-section nopadding cs-nomargin" style="margin-top: 0px;padding-top: 60px;padding-bottom: 50px;margin-bottom: 0px;background: #ffffff;">
 		<div class="container">
@@ -176,42 +173,13 @@
 									<div class="text-holder">
 										<div class="list-rating">
 											
-											<form action="" method='POST'>
-												<p>Write your Rattings </p>
-												<label >
-													How Doy you rate this restaurant 
-												</label>
-												<br>
-												<div>
-													<div class="rate">
-														<input type="radio" name='rating' id='rating10' value='5' required><label for="rating10" title='5' ></label>
-														<input type="radio" name='rating' id='rating9' value='4.5' required> <label for="rating9" title='4.5' class='half' ></label>
-														<input type="radio" name='rating' id='rating8' value='4' required> <label for="rating8" title="4"></label>
-														<input type="radio" name='rating' id='rating7' value='3.5' required><label for="rating7" title='3.5' class='half'></label>
-														<input type="radio" name='rating' id='rating6' value='3' required><label for="rating6" title='3'></label>
-														<input type="radio" name='rating' id='rating5' value='2.5' required><label for="rating5" title='2.5' class='half' ></label>
-														<input type="radio" name='rating' id='rating4' value='2' required><label for="rating4" title='2' ></label>
-														<input type="radio" name='rating' id='rating3' value='1.5' required><label for="rating3" title='1.5'  class='half'></label>
-														<input type="radio" name='rating' id='rating2' value='1' required><label for="rating2" title='1' ></label>
-														<input type="radio" name='rating' id='rating1' value='0' required><label for="rating1" title='0.5' class='half'></label>
-													</div>
-												</div>
-												Review Title 
-												<input type="text" class='form-control' name='subject'>
-												Review 
-												<textarea name="review" rows="4" class='form-control'>
-
-												</textarea>
-												<br>
-												<input type="submit" class='btn btn-primay'>
-
-											</form>
+							
 											<span class="reviews"></span>
 
 										</div>
 										<div class="post-title">
 											<h5>
-												<a href="listing-detail.html">{{vendor}}</a>
+												<a href="{% url 'vendor_detail' vendor.vendor_slug %}">{{vendor}}</a>
 												<span class="sponsored text-color">Sponsored</span>
 											</h5>
 										</div>

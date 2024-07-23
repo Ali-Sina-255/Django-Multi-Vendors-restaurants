@@ -34,7 +34,7 @@ django-multiselectfield==0.1.12
 django-templated-mail==1.1.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.3.1
-djoser==2.2.2
+djoser==2.2.3
 docopt==0.6.2
 drf-nested-routers==0.93.5
 et-xmlfile==1.1.0
@@ -69,6 +69,7 @@ pytest==8.1.2
 pytest-cov==5.0.0
 pytest-django==4.8.0
 python-dateutil==2.9.0.post0
+python-decouple==3.8
 python-dotenv==1.0.1
 python3-openid==3.2.0
 pytz==2024.1

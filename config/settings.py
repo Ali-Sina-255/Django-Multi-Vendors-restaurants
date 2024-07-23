@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     "rest_framework",
     'django_filters',
     "django_htmx",
-    "FoodOnline.apps.FoodonlineConfig",
     "accounts.apps.AccountsConfig",
     "vendor.apps.VendorConfig",
     "menu.apps.MenuConfig",
@@ -60,6 +59,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "accounts.context_processorss.get_vendor",
                 "accounts.context_processorss.get_user_profile",
+                "accounts.context_processorss.get_paypal_client_id",
                 "marketplace.context_processors.get_cart_counter",
                 "marketplace.context_processors.get_cart_amounts",
             ],
@@ -138,7 +138,15 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
+PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
+
+
+
 # settings.py
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+
+
+
 # EMAIL_USE_TLS = True  # For Gmail, use TLS; for other providers, adjust accordingly
 # EMAIL_HOST_USER = 'your_email@gmail.com'
 # EMAIL_HOST_PASSWORD = 'your_password'
@@ -148,5 +156,8 @@ REST_FRAMEWORK = {
 
     # 'DEFAULT_AUTHENTICATION_CLASSES': (
     #     'rest_framework.authentication.TokenAuthentication',
-    # ),
+    # ),s
 }
+
+
+
