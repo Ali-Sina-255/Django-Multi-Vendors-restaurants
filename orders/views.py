@@ -7,7 +7,7 @@ from . forms import OrderForms
 from . models import Order, Payment
 from . utils import generate_order_num
 
-
+from django.http import HttpResponse
 
 # Create your views here.
 def order_place_view(request):
@@ -54,6 +54,9 @@ def order_place_view(request):
  
 def payments(request):
     # if the request is ajax or not 
+    return HttpResponse(
+        'this is payment response.'
+    )
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         order_number = request.POST.get('order_number')
         transaction_id = request.POST.get('transaction_id')
