@@ -1,15 +1,19 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+
+
 from marketplace.models import Cart
 from marketplace.context_processors import get_cart_amounts
-from django.views.decorators.csrf import csrf_exempt
+from accounts.utils import send_notification
 from . forms import OrderForms
 from . models import Order, Payment, OrderedFood
 from . utils import generate_order_num
 
-from django.http import HttpResponse
 
 # Create your views here.
+@login_required(login_url='login')
 def order_place_view(request):
     cart_items = Cart.objects.filter(user=request.user).order_by('-created_at')
     cart_count = cart_items.count()
@@ -51,7 +55,7 @@ def order_place_view(request):
         print(subtotal,grand_total)
     return render(request, 'order/order_place.html')
 
- 
+@login_required(login_url='login')
 def payments(request):
     # if the request is ajax or not 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest' and request.method == 'POST':
@@ -79,13 +83,20 @@ def payments(request):
             ordered_food.order = order
             ordered_food.payment = payment
             ordered_food.user = request.user
-            
             ordered_food.food_item = item.food_item
             ordered_food.quantity = item.quantity
             ordered_food.price = item.food_item.price
             ordered_food.amount = item.food_item.price * item.quantity
             ordered_food.save()
-        return HttpResponse("Saved ordered food")
+        mail_subject = 'Thank your for ordering with US.'
+        mail_template = 'order/order_confirmation_email.html'
+        context = {
+            'user':request.user,
+            'order':order,
+            'to_email':order.email
+        }
+        send_notification(mail_subject,mail_template,context)
+    return HttpResponse("Saved ordered food")
 
             
         # update the order 

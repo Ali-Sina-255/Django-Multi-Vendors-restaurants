@@ -50,6 +50,6 @@ def send_reset_password_email(request, user):
 def send_notification(mail_subject, mail_template, context):
     from_email = settings.DEFAULT_FROM_EMAIL
     message = render_to_string(mail_template, context)
-    to_email = context['user'].email
+    to_email = context['to_email']
     mail = EmailMessage(mail_subject, message, from_email, [to_email])
     mail.send()
