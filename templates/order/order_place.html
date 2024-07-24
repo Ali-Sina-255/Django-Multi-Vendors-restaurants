@@ -160,20 +160,22 @@
 </script> {% endcomment %}
 
 <script>
+  var grand_total = '{{grand_total}}'
   paypal.Buttons({
       createOrder: function(data, actions) {
           return actions.order.create({
               purchase_units: [{
                   amount: {
-                      value: '0.01'  // Replace with the actual amount
+                      value: grand_total  // Replace with the actual amount
                   }
               }]
           });
       },
       onApprove: function(data, actions) {
           return actions.order.capture().then(function(details) {
-              alert('Transaction completed by ' + details.payer.name.given_name);
-              // You can handle the transaction details here
+            console.log(details)
+            var transaction = details.purchase_units[0].payments.captures[0];
+            console.log(transaction.id)
           });
       }
   }).render('#paypal-button-container');

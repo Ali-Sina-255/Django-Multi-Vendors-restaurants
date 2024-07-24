@@ -52,14 +52,14 @@ def order_place_view(request):
     return render(request, 'order/order_place.html')
 
  
-def payment(request):
+def payments(request):
     # if the request is ajax or not 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         order_number = request.POST.get('order_number')
         transaction_id = request.POST.get('transaction_id')
         payment_method = request.POST.get('payment_method')
         status = request.POST.get('status')
-
+        
         order = Order.objects.get(user=request.user, order_number=order_number)
         payment = Payment.objects.get(user=request.user,
                                       transaction_id=transaction_id,

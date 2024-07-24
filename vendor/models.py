@@ -5,6 +5,7 @@ from datetime import time, date, datetime
 
 
 class Vendor(models.Model):
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_profile')
     vendor_name = models.CharField(max_length=255)
