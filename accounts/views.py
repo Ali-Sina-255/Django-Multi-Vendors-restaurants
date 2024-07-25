@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
 from django.utils.http import urlsafe_base64_decode
 from django.template.defaultfilters import slugify
-from .forms import UserRegistrationForm
-from .models import User, UserProfile
-from django.contrib import messages, auth
-from vendor.forms import VendorRegisterForm
-from .utils import detect_user, send_verification_email, send_reset_password_email
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib import messages, auth
+from .forms import UserRegistrationForm
+from .models import User, UserProfile
+from vendor.forms import VendorRegisterForm
+from .utils import detect_user, send_verification_email, send_reset_password_email
+from orders.models import Order
 
 
 # Restrict the vendor from accessing the customers page
@@ -230,4 +231,9 @@ def vendor_dashboard_view(request):
 @login_required(login_url="login")
 @user_passes_test(check_role_customer)
 def customer_dashboard_view(request):
-    return render(request, "account/customer_dashboard.html")
+    orders = Order.objects.filter(user=request.user, is_order=True)[:10]
+    context = {
+        "orders":orders,
+        "order_count":orders.count()
+    }
+    return render(request, "account/customer_dashboard.html", context)

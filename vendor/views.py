@@ -15,10 +15,16 @@ from .models import Vendor, OpeningHour
 from menu.forms import CategoryForm, FoodItemForm
 from menu.models import FootItem
 
-
 def get_vendor(request):
-    vendor = Vendor.objects.get(user=request.user)
-    return vendor
+    vendors = Vendor.objects.filter(user=request.user)
+    if vendors.count() == 1:
+        return vendors.first()
+    elif vendors.count() > 1:
+        # Handle the case where multiple vendors are found
+        # For example, return the first one or raise an error
+        return vendors.first()  # or handle it differently
+    else:
+        return None
 
 
 @login_required(login_url="login")
@@ -129,6 +135,7 @@ def delete_category(request, pk):
     return redirect("menu_builder")
 
 
+
 @login_required(login_url="login")
 @user_passes_test(check_rol_vendor)
 def add_food_view(request):
@@ -137,23 +144,24 @@ def add_food_view(request):
         if form.is_valid():
             food_title = form.cleaned_data["food_title"]
             food = form.save(commit=False)
-            food.vendor = get_vendor(request)
+            vendor = get_vendor(request)
+            if not vendor:
+                messages.error(request, "No vendor found for this user.")
+                return redirect("add_food")
+            food.vendor = vendor
             food.slug = slugify(food_title)
-            form.save()
-            messages.success(request, "food item is added successfully")
+            food.save()
+            messages.success(request, "Food item is added successfully")
             return redirect("food_items_by_category", food.category.id)
         else:
             print(form.errors)
-            messages.error(request, "your food item is not added")
+            messages.error(request, "Your food item is not added")
             return redirect("add_food")
     else:
         form = FoodItemForm()
-        form.fields["category"].queryset = Category.objects.filter(
-            vendor=get_vendor(request)
-        )
+        form.fields["category"].queryset = Category.objects.filter(vendor=get_vendor(request))
     context = {"form": form}
     return render(request, "vendor/add_food.html", context)
-
 
 @login_required(login_url="login")
 @user_passes_test(check_rol_vendor)

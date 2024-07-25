@@ -3,7 +3,7 @@
     <div class="user-nav-list">
         <ul>
             <li class="{% if 'accounts/customer_dashboard/' == request.path or '/accounts/customers/' == request.path %}active{% endif %}"><a href="{% url 'customer_dashboard' %}"><i class="icon-dashboard3"></i>Dashboard</a></li>
-            <li><a href="restaurant-restaurant.html"><i class="icon-add_shopping_cart"></i>My Order</a></li>
+            <li class="{% if  '/my_order/' in request.path or '/order_detail/' in request.path %}active{% endif %}"><a href="{% url 'my_order' %}"><i class="icon-add_shopping_cart"></i>My Order</a></li>
             <li><a href="{% url 'c_profile' %}"><i class="icon-building"></i>Profile Settings </a></li>
 
             <li><a href="restaurant-change-password.html"><i class="icon-unlock-alt"></i>Change Password</a></li>

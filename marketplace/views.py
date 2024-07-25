@@ -148,7 +148,6 @@ def checkout_view(request):
         "phone_number": request.user.phone_number,
         "email":request.user.email,
         "address":user_profile.address,
-        'country':user_profile.country,
         "state": user_profile.state,
         "city":user_profile.city
     }
