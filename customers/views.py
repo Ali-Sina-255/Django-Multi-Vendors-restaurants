@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from accounts.forms import UserInForm, UserProfileForm
 from accounts.models import UserProfile,User
 from django.contrib import messages
-from orders.models import Order
+from orders.models import Order, OrderedFood
 
 
 # Create your views here.
@@ -44,5 +44,21 @@ def my_orders_view(request):
 
 
 def order_detail_view(request, order_number):
-    context = {}
-    return render(request, 'customers/order_details.html',context)
+    try:
+        order = Order.objects.get(order_number=order_number, is_order=True)
+        ordered_food = OrderedFood.objects.filter(order=order)
+        subtotal = 0
+        for item in ordered_food:
+            subtotal +=(item.price * item.quantity)
+            
+        print(ordered_food)
+        
+        context = {
+            "order":order,
+            "ordered_food":ordered_food,
+            "subtotal":subtotal
+        }
+        return render(request, 'customers/order_details.html',context)
+    except:
+        return redirect("customer")
+    
