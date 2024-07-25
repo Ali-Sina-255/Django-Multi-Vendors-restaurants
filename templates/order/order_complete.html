@@ -3,15 +3,16 @@
     <div class="justify-content-center row">
 
         <div class="col-md-8">
-            <div class="bg-white p3">
-                <img src="{% static 'logo/foodOnlineLogo.png' %}" alt="" srcset="" width='300'>
-            </div>
+            <div class="bg-white p-3">
+                <img src="{% static 'assets/logo/foodOnlineLogo.png' %}" alt="" srcset="" width='300'>
+                 
+           
             <div class='row'>
-                <div class="col-md-6 text-right">
+                <div class="col-md-6 ">
                     <h4 class='mt-2 mb-3'>Thank you for your order .</h4>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-6 text-right">
                     <p class='mb-0'>{{order.name}}</p>
                     <p class='mb-0'>{{order.address}}</p>
                     <p class='mb-0'>{{order.phone_number}}</p>
@@ -57,10 +58,10 @@
               </table>
             <div class='row mt-5'>
                 <div class='d-flex justify-content-center col-md-6'>
-                    <img src="{% static 'images/piad.png' %}" alt="" srcset="">
+                    <img src="{% static 'assets/images/paid.png' %}" alt="" srcset=""  width='200'>
 
                 </div>
-                <div>
+                <div class='col-md-6'>
                     <ul>
                         <li style="list-style-type: none">
                           Subtotal
@@ -82,7 +83,7 @@
                 </div>
 
             </div>
-
+            <hr>
             <div class='d-flex justify-content-between '>
                <div>
                     <span class='d-block font-weight-bold'>
@@ -102,8 +103,7 @@
 
         </div>
 
-
-
+        </div>
     </div>
 
 </div>

@@ -10,7 +10,7 @@ from accounts.utils import send_notification
 from . forms import OrderForms
 from . models import Order, Payment, OrderedFood
 from . utils import generate_order_num
-
+import logging
 
 # Create your views here.
 @login_required(login_url='login')
@@ -128,10 +128,13 @@ def payments(request):
 
 
 def order_complete_view(request):
-    order_number = request.GET.get('order_number')
+    order_number = request.GET.get('order_no')
     transaction_id = request.GET.get("trans_id")
+    print(order_number)
+    print(transaction_id)
+    
     try:
-        order = Order.objects.get(order_number=order_number, transaction_id=transaction_id,is_order=True)
+        order = Order.objects.get(order_number=order_number, payment__transaction_id=transaction_id,is_order=True)
         ordered_food = OrderedFood.objects.filter(order=order)
         subtotal = 0
         for item in ordered_food:
@@ -144,4 +147,53 @@ def order_complete_view(request):
         return render(request, 'order/order_complete.html', context) 
         
     except:
+        return redirect('home')
+    
+    
+
+    order_number = request.GET.get('order_number')
+    payment_id = request.GET.get('trans_id')    
+    print(order_number)
+    print(p)
+
+    try:
+        order = Order.objects.get(order_number=order_number, payment_id=payment_id, is_order=True)
+        ordered_food = OrderedFood.objects.filter(order=order)
+        subtotal = sum(item.price * item.quantity for item in ordered_food)
+
+        context = {
+            'order': order,
+            'ordered_food': ordered_food,
+            'subtotal': subtotal
+        }
+        return render(request, 'order/order_complete.html', context)
+    
+    except Order.DoesNotExist:
+        logger.error(f"Order not found for order_number: {order_number} and payment_id: {payment_id}")
+        return redirect('home')
+    
+    except Exception as e:
+        logger.error(f"An error occurred: {str(e)}")
+        return redirect('home')
+    order_number = request.GET.get('order_number')
+    transaction_id = request.GET.get('trans_id')
+
+    try:
+        order = Order.objects.get(order_number=order_number, transaction_id=transaction_id, is_order=True)
+        ordered_food = OrderedFood.objects.filter(order=order)
+        subtotal = sum(item.price * item.quantity for item in ordered_food)
+
+        context = {
+            'order': order,
+            'ordered_food': ordered_food,
+            'subtotal': subtotal
+        }
+        return render(request, 'order/order_complete.html', context)
+    
+    except Order.DoesNotExist:
+        logger.error(f"Order not found for order_number: {order_number} and transaction_id: {transaction_id}")
+        return redirect('home')
+    
+    except Exception as e:
+        logger.error(f"An error occurred: {str(e)}")
         return redirect('home')

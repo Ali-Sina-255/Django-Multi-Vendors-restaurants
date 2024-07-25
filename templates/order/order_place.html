@@ -60,7 +60,7 @@
                         <td><img src="{{item.food_item.image.url}}" alt="Food Images" width='40' srcset=""></td>
                         <td>{{item.food_item|truncatechars:15}}</td>
                         <td>{{item.quantity}}</td>
-                        <td>AF {{item.food_item.price}}</td>
+                        <td>AF{{item.food_item.price}}</td>
                        </tr>
 
                         {% endfor %}
@@ -150,7 +150,7 @@
                 sendTransaction(transaction_id, payment_method, status);
                 const element = document.getElementById('paypal-button-container')
                 element.innerHTML = ''; 
-                element.innerHTML = '<h4  class="text-center"> <i class="fa fa-spinner fa-spin"></i>Thank you for your payment.! </h4>'
+                element.innerHTML = '<h4  class="text-center"> <i class="fa fa-spinner fa-spin"></i>Please wait! </h4>'
             });
         }
     }).render('#paypal-button-container');
@@ -167,11 +167,7 @@
                 "csrfmiddlewaretoken": csrftoken
             },
             success: function(response) {
-              if(response.order_number && response.transaction_id) {
-                  window.location.href = order_complete + '?order_number=' + response.order_number + '&trans_id=' + response.transaction_id;
-              } else {
-                  console.error("Response does not contain the expected properties.");
-              }
+              window.location.href = order_complete + '?order_no='+ response.order_number+'&trans_id='+response.transaction_id
           }
           
         });
