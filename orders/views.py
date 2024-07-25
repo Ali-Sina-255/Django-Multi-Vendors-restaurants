@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 
 
@@ -89,20 +89,59 @@ def payments(request):
             ordered_food.amount = item.food_item.price * item.quantity
             ordered_food.save()
         mail_subject = 'Thank your for ordering with US.'
-        mail_template = 'order/order_confirmation_email.html'
+        mail_template = 'order/email/order_confirmation_email.html'
         context = {
             'user':request.user,
             'order':order,
             'to_email':order.email
         }
+        # send notification email to customer
         send_notification(mail_subject,mail_template,context)
-    return HttpResponse("Saved ordered food")
-
+        
+        #   SEND NOTIFICATION EMAIL TO VENDOR
+        
+        mail_subject = "You have received new order"
+        mail_template = 'order/email/order_received_email.html'
+        
+        to_email = []
+        for i in cart_items:
+            if i.food_item.vendor.user.email is not to_email:   
+                to_email.append(i.food_item.vendor.user.email)
+        print(to_email)
             
+        context = {
+            "order":order,
+            "to_email":to_email,
+        }
+        send_notification(mail_subject,mail_template,context)
+    # cart_items.delete()
+    response = {
+        'order_number': order_number,
+        'transaction_id': transaction_id
+    }
+    return JsonResponse(response)
         # update the order 
         
         # store the payment detail in the payment model 
         # update the order model 
         # movie the cart item to order food model 
 
-    
+
+def order_complete_view(request):
+    order_number = request.GET.get('order_number')
+    transaction_id = request.GET.get("trans_id")
+    try:
+        order = Order.objects.get(order_number=order_number, transaction_id=transaction_id,is_order=True)
+        ordered_food = OrderedFood.objects.filter(order=order)
+        subtotal = 0
+        for item in ordered_food:
+            subtotal +=(item.price * item.quantity)
+        context = {
+            'order':order,
+            "ordered_food":ordered_food,
+            "subtotal":subtotal
+        }
+        return render(request, 'order/order_complete.html', context) 
+        
+    except:
+        return redirect('home')
