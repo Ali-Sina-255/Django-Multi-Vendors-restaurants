@@ -5,12 +5,13 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages, auth
+
 from .forms import UserRegistrationForm
 from .models import User, UserProfile
 from vendor.forms import VendorRegisterForm
 from .utils import detect_user, send_verification_email, send_reset_password_email
 from orders.models import Order
-
+from vendor.models import Vendor
 
 # Restrict the vendor from accessing the customers page
 def check_rol_vendor(user):
@@ -225,7 +226,15 @@ def my_account_view(request):
 @login_required(login_url="login")
 @user_passes_test(check_rol_vendor)
 def vendor_dashboard_view(request):
-    return render(request, "account/vendor_dashboard.html")
+    vendor = Vendor.objects.get(user=request.user)
+    orders = Order.objects.filter(vendors__in=[vendor.id], is_order=True)
+    recent_order = orders[:10]
+    context = {
+        'orders':orders,
+        "order_count":orders.count(),
+        "recent_order":recent_order
+    }
+    return render(request, "account/vendor_dashboard.html", context)
 
 
 @login_required(login_url="login")

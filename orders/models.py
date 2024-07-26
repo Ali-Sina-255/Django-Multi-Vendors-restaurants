@@ -1,6 +1,9 @@
 from django.db import models
 from accounts.models import User
 from menu.models import FootItem
+from vendor.models import Vendor
+
+
 PAYMENT_METHOD = (
     ('Paypal', 'PayPal'),
 )
@@ -18,25 +21,26 @@ class Payment(models.Model):
     
 class Order(models.Model):
     STATUS = (
-        ("New","New"),
-        ("Complete","Complete"),
-        ("Accepted","Accepted"),
-        ("Cancelled","Cancelled"),
+        ("New", "New"),
+        ("Complete", "Complete"),
+        ("Accepted", "Accepted"),
+        ("Cancelled", "Cancelled"),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    payment = models.ForeignKey(Payment, on_delete=models.CASCADE,null=True, blank=True)
+    payment = models.ForeignKey(Payment, on_delete=models.CASCADE, null=True, blank=True)
+    vendors = models.ManyToManyField(Vendor, blank=True)
     order_number = models.CharField(max_length=50)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255)  # Remove unique=True
     phone_number = models.CharField(max_length=13, blank=True, null=True)
     address = models.CharField(max_length=200, null=True, blank=True)
-    country = models.CharField(max_length=100, null=True, blank=True)
     state = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     total = models.FloatField()
+    total_data = models.JSONField(blank=True, null=True)
     payment_method = models.CharField(max_length=200)
-    status = models.CharField(choices=STATUS,max_length=30,default='New')
+    status = models.CharField(choices=STATUS, max_length=30, default='New')
     is_order = models.BooleanField(default='False')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -44,9 +48,13 @@ class Order(models.Model):
     @property
     def name(self) -> str:
         return f'{self.first_name} {self.last_name}'
-    
+
     def __str__(self) -> str:
         return self.order_number
+
+    def order_place_to(self):
+        return ",".join([str(i) for i in self.vendors.all()])
+
 
 
 class OrderedFood(models.Model):

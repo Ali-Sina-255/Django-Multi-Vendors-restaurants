@@ -151,11 +151,13 @@
 
 										<figure>
 											<a href="#"><img src="{{vendor.user_profile.profile_pic.url}}" class="img-thumb wp-post-image" alt=""></a>
+											<p>location</p>
 										</figure>
 										{% else %}
 										<figure>
 											<a href="#"><img src="{%  static 'assets/images/default-profile.PNG' %}" class="img-thumb wp-post-image" alt=""></a>
 										</figure>
+										
 										{% endif %}
 
 										{% if vendor.is_open %}
@@ -173,7 +175,7 @@
 									<div class="text-holder">
 										<div class="list-rating">
 											
-							
+										
 											<span class="reviews"></span>
 
 										</div>
@@ -182,6 +184,11 @@
 												<a href="{% url 'vendor_detail' vendor.vendor_slug %}">{{vendor}}</a>
 												<span class="sponsored text-color">Sponsored</span>
 											</h5>
+											{% if vendor.user_profile.address%}
+											{{vendor.user_profile.address}}
+											{% else %}
+
+											{% endif %}
 										</div>
 										{% if vendor.user_profile.city and vendor.user_profile.state and vendor.user_profile.pin_code %}
 										<span>{{vendor.user_profile.city}}, {{vendor.user_profile.state}}, {{vendor.user_profile.pin_code}}</span> 

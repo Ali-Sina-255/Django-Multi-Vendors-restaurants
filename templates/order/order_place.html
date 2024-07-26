@@ -7,35 +7,35 @@
         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
           <div class="tabs-holder horizontal">
             <ul class="stickynav-tabs nav nav-tabs">
-              <li class="active">
-                <a data-toggle="tab" href="#home"
-                  ><i class="fa fa-shopping-cart text-danger"></i>Review Your
-                  Billing address
-                </a>
-              </li>
+                <li class="active">
+                    <a data-toggle="tab" href="#home">
+                        <i class="fa fa-shopping-cart text-danger"></i>Review Your Billing address
+                    </a>
+                </li>
             </ul>
             <div class="tab-content">
-              <div id="home" class="tab-pane in active">
-                <div class="menu-itam-holder">
-                  <div id="menu-item-list-6272" class="menu-itam-list">
-                    <div class="billing-address">
-                      <div> 
-                        <b>{{order.name}}</b>
-                      </div>
-                      <div>{{order.address}}</div>
-                      <div>{{order.countery}}</div>
-                      <div>{{order.state}}, {{order.city}}</div>
-                      <div><b>Phone Number :</b>{{order.phone_number}}</div>
-                      <div><b>Email Address : </b>{{order.email}}</div>
-                      <div><b>Payment Method : </b>{{order.payment_method}}</div>
-                      <br>
-                      <a href="{% url 'checkout' %}" class='btn btn-outline-danger mb-4'>Edite</a>
+                <div id="home" class="tab-pane in active">
+                    <div class="menu-itam-holder">
+                        <div id="menu-item-list-6272" class="menu-itam-list">
+                            <div class="billing-address">
+                                <div>
+                                    <b>{{ order.first_name }} {{ order.last_name }}</b>
+                                </div>
+                                <div>{{ order.address }}</div>
+                                <div>{{ order.country }}</div>
+                                <div>{{ order.state }}, {{ order.city }}</div>
+                                <div><b>Phone Number :</b>{{ order.phone_number }}</div>
+                                <div><b>Email Address : </b>{{ order.email }}</div>
+                                <div><b>Payment Method : </b>{{ order.payment_method }}</div>
+                                <br>
+                                <a href="{% url 'checkout' %}" class='btn btn-outline-danger mb-4'>Edit</a>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
             </div>
-          </div>
+        </div>
+        
         </div>
         {% comment %} Order {% endcomment %}
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
