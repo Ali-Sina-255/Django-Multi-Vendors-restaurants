@@ -1,7 +1,11 @@
+import json
 from django.db import models
 from accounts.models import User
 from menu.models import FootItem
 from vendor.models import Vendor
+ 
+ 
+request_object = ""
 
 
 PAYMENT_METHOD = (
@@ -48,7 +52,16 @@ class Order(models.Model):
     @property
     def name(self) -> str:
         return f'{self.first_name} {self.last_name}'
-
+    
+    def get_total_by_vendor(self):
+        vendor = Vendor.objects.get(user=request_object.user)
+        if self.total_data:
+            total_data = json.loads(self.total_data)
+            data  = total_data.get(str(vendor.id))
+            print(data)
+        return vendor
+    
+    
     def __str__(self) -> str:
         return self.order_number
 

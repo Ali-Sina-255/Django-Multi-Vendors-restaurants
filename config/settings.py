@@ -43,6 +43,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     'accounts.middlewares.CrossOriginOpenerPolicyMiddleware',
+    "orders.middleware.RequestObject",
 ]
 
 ROOT_URLCONF = "config.urls"
