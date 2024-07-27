@@ -9,6 +9,7 @@ from accounts.models import UserProfile
 from accounts.forms import UserProfileForm
 from accounts.views import check_rol_vendor
 from menu.models import Category, FootItem
+from orders.models import Order, OrderedFood
 
 from .forms import VendorRegisterForm, OpeningHoursForm
 from .models import Vendor, OpeningHour
@@ -268,3 +269,26 @@ def remove_opening_hour_view(request, pk=None):
 
 def review_view(request, restaurant_id):
     pass
+
+
+def vendor_order_details_view(request ,order_number):
+    try:
+        order = Order.objects.get(order_number=order_number,is_order=True)
+        ordered_food = OrderedFood.objects.filter(order=order,food_item__vendor=get_vendor(request))
+        subtotal = 0
+        
+        for item in ordered_food:
+            subtotal +=(item.price * item.quantity)
+            
+            total = subtotal
+            
+        context = {
+            "order":order,
+            "ordered_food":ordered_food,
+            "subtotal":subtotal ,
+            "total":total
+        }
+        return render(request, 'vendor/vendor_order_detail.html',context)   
+    except:
+        return redirect('vendor')
+

@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 
 from marketplace.models import Cart
 from marketplace.context_processors import get_cart_amounts
 from accounts.utils import send_notification
+from menu.models import FootItem
 from . forms import OrderForms
 from . models import Order, Payment, OrderedFood
 from . utils import generate_order_num
@@ -26,6 +27,23 @@ def order_place_view(request):
     for item in cart_items:
         if item.food_item.vendor.id not in vendors_ids:
             vendors_ids.append(item.food_item.vendor.id)
+    subtotal = 0
+    
+    vendor_k = {}
+    for i in cart_items:
+        food_item = FootItem.objects.get(pk=i.food_item.id,vendor__id__in=vendors_ids)
+        
+        v_id = food_item.vendor.id
+        if v_id in vendor_k:
+            subtotal = vendor_k[v_id]
+            subtotal +=(food_item.price * i.quantity)
+            vendor_k[v_id] = subtotal
+            
+        else:
+            subtotal =(food_item.price * i.quantity)
+            vendor_k[v_id] = subtotal
+            
+    print(vendor_k)
     
     subtotal = get_cart_amounts(request)['subtotal']
     grand_total = get_cart_amounts(request)['grand_total']
@@ -75,51 +93,6 @@ def order_place_view(request):
     }
     return render(request, 'order/order_place.html', context)
 
-# def order_place_view(request):
-#     cart_items = Cart.objects.filter(user=request.user).order_by('-created_at')
-#     cart_count = cart_items.count()
-
-#     if cart_count <= 0:
-#         return redirect('marketplace')
-    
-#     vendors_ids = []
-#     for i in cart_items:
-#         if i.food_item.vendor.id not in vendors_ids:
-#             vendors_ids.append(i.food_item.vendor.id)
-    
-#     subtotal = get_cart_amounts(request)['subtotal']
-#     grand_total = get_cart_amounts(request)['grand_total']
-#     if request.method == "POST":
-#         form = OrderForms(request.POST)
-#         if form.is_valid():
-#             order = Order()
-#             order.first_name = form.cleaned_data['first_name']
-#             order.last_name = form.cleaned_data['last_name']
-#             order.phone_number = form.cleaned_data['phone_number']
-#             order.email = form.cleaned_data['email']
-#             order.address = form.cleaned_data['address']
-#             order.state = form.cleaned_data['state']
-#             order.city = form.cleaned_data['city']
-#             order.user = request.user
-#             order.total = grand_total
-#             order.payment_method  = request.POST['payment_method']
-#             order.save()
-#             order.order_number = generate_order_num(order.id)
-#             order.vendors.add(*vendors_ids)
-#             order.save()
-#             messages.success(request, 'your order is send successfully')
-#             context ={
-#                 "order":order,
-#                 "cart_items":cart_items
-#             }
-#             return render(request, 'order/order_place.html', context)
-           
-#         else:
-#             print(form.errors)
-#             messages.error(request, 'your order is not send successfully!')
-
-#         print(subtotal,grand_total)
-#     return render(request, 'order/order_place.html')
 
 @login_required(login_url='login')
 def payments(request):
@@ -198,7 +171,6 @@ def order_complete_view(request):
     transaction_id = request.GET.get("trans_id")
     print(order_number)
     print(transaction_id)
-    
     try:
         order = Order.objects.get(order_number=order_number, payment__transaction_id=transaction_id,is_order=True)
         ordered_food = OrderedFood.objects.filter(order=order)
@@ -214,50 +186,3 @@ def order_complete_view(request):
     except:
         return redirect('home')
     
-
-# order_number = request.GET.get('order_number')
-# payment_id = request.GET.get('trans_id')    
-# print(order_number)
-# print(p)
-
-# try:
-#     order = Order.objects.get(order_number=order_number, payment_id=payment_id, is_order=True)
-#     ordered_food = OrderedFood.objects.filter(order=order)
-#     subtotal = sum(item.price * item.quantity for item in ordered_food)
-
-#     context = {
-#         'order': order,
-#         'ordered_food': ordered_food,
-#         'subtotal': subtotal
-#     }
-#     return render(request, 'order/order_complete.html', context)
-
-# except Order.DoesNotExist:
-#     logger.error(f"Order not found for order_number: {order_number} and payment_id: {payment_id}")
-#     return redirect('home')
-
-# except Exception as e:
-#     logger.error(f"An error occurred: {str(e)}")
-#     return redirect('home')
-# order_number = request.GET.get('order_number')
-# transaction_id = request.GET.get('trans_id')
-
-# try:
-#     order = Order.objects.get(order_number=order_number, transaction_id=transaction_id, is_order=True)
-#     ordered_food = OrderedFood.objects.filter(order=order)
-#     subtotal = sum(item.price * item.quantity for item in ordered_food)
-
-#     context = {
-#         'order': order,
-#         'ordered_food': ordered_food,
-#         'subtotal': subtotal
-#     }
-#     return render(request, 'order/order_complete.html', context)
-
-# except Order.DoesNotExist:
-#     logger.error(f"Order not found for order_number: {order_number} and transaction_id: {transaction_id}")
-#     return redirect('home')
-
-# except Exception as e:
-#     logger.error(f"An error occurred: {str(e)}")
-#     return redirect('home')
