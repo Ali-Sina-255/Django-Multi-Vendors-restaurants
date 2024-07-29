@@ -280,15 +280,24 @@ def vendor_order_details_view(request ,order_number):
         for item in ordered_food:
             subtotal +=(item.price * item.quantity)
             
-            total = subtotal
+        total = subtotal
             
         context = {
             "order":order,
             "ordered_food":ordered_food,
-            "subtotal":subtotal ,
+        
             "total":total
         }
         return render(request, 'vendor/vendor_order_detail.html',context)   
     except:
         return redirect('vendor')
 
+
+def my_order_view(request):
+    vendor = Vendor.objects.get(user=request.user)
+    orders = Order.objects.filter(vendors__in=[vendor.id], is_order=True)
+
+    context = {
+        "orders":orders
+    }
+    return render(request, 'vendor/my_order.html', context)

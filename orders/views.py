@@ -1,10 +1,11 @@
+import json
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 
-from marketplace.models import Cart
+from marketplace.models import Cart, Tax
 from marketplace.context_processors import get_cart_amounts
 from accounts.utils import send_notification
 from menu.models import FootItem
@@ -12,6 +13,7 @@ from . forms import OrderForms
 from . models import Order, Payment, OrderedFood
 from . utils import generate_order_num
 import logging
+
 
 # Create your views here.
 
@@ -24,11 +26,13 @@ def order_place_view(request):
         return redirect('marketplace')
     
     vendors_ids = []
+    total_data = {}
+    get_tax = Tax.objects.filter(is_active=True)
     for item in cart_items:
         if item.food_item.vendor.id not in vendors_ids:
             vendors_ids.append(item.food_item.vendor.id)
+            
     subtotal = 0
-    
     vendor_k = {}
     for i in cart_items:
         food_item = FootItem.objects.get(pk=i.food_item.id,vendor__id__in=vendors_ids)
@@ -36,14 +40,22 @@ def order_place_view(request):
         v_id = food_item.vendor.id
         if v_id in vendor_k:
             subtotal = vendor_k[v_id]
-            subtotal +=(food_item.price * i.quantity)
+            subtotal += (food_item.price * i.quantity)
             vendor_k[v_id] = subtotal
-            
         else:
             subtotal =(food_item.price * i.quantity)
             vendor_k[v_id] = subtotal
             
-    print(vendor_k)
+        tax_dict = {}
+        for i in get_tax:
+            tax_type =i.tax_type
+            tax_percentage = i.tax_percentage
+            tax_amount = round((tax_percentage*subtotal)/100,2)
+            tax_dict.update({tax_type:{str(tax_percentage):tax_amount}})
+            
+        total_data.update({food_item.vendor.id:{str(subtotal):str(tax_dict)}})  
+    print(total_data)
+    
     
     subtotal = get_cart_amounts(request)['subtotal']
     grand_total = get_cart_amounts(request)['grand_total']
@@ -61,6 +73,7 @@ def order_place_view(request):
                 city=form.cleaned_data['city'],
                 user=request.user,
                 total=grand_total,
+                total_data= json.dumps(total_data),
                 payment_method=request.POST['payment_method']
             )
             order.save()
@@ -186,3 +199,6 @@ def order_complete_view(request):
     except:
         return redirect('home')
     
+    
+def my_order_view(request):
+    return render(request, 'vendor/my_order.html')

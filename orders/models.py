@@ -11,6 +11,7 @@ request_object = ""
 PAYMENT_METHOD = (
     ('Paypal', 'PayPal'),
 )
+
 # Create your models here.
 class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -53,23 +54,41 @@ class Order(models.Model):
     def name(self) -> str:
         return f'{self.first_name} {self.last_name}'
     
-    def get_total_by_vendor(self):
-        vendor = Vendor.objects.get(user=request_object.user)
-        if self.total_data:
-            total_data = json.loads(self.total_data)
-            data  = total_data.get(str(vendor.id))
-            print(data)
-        return vendor
-    
-    
-    def __str__(self) -> str:
-        return self.order_number
-
     def order_place_to(self):
         return ",".join([str(i) for i in self.vendors.all()])
+    
+    def get_total_by_vendor(self, request_object):
+        
+        vendor = Vendor.objects.get(user=request_object.user)
+        subtotal = 0.0
+        tax = 0.0
+        tax_dict = {}
 
-
-
+        if self.total_data:
+            total_data = json.loads(self.total_data)
+            vendor_data = total_data.get(str(vendor.id))
+            
+            for key, val in vendor_data.items():
+                subtotal += float(key)
+                val = val.replace("'", "\"")
+                val = json.loads(val)
+                tax_dict.update(val)
+                
+                for i in val:
+                    for j in val[i]:
+                        tax += float(val([i][j]))
+            
+        grand_total = subtotal + tax
+        context = {
+            "subtotal": subtotal,
+            "tax_dict": tax_dict,
+            "grand_total": grand_total
+        }
+        return context
+    
+    def __str__(self) -> str:
+            return self.order_number
+    
 class OrderedFood(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     payment = models.ForeignKey(Payment, on_delete=models.SET_NULL, blank=True, null=True)

@@ -228,11 +228,20 @@ def my_account_view(request):
 def vendor_dashboard_view(request):
     vendor = Vendor.objects.get(user=request.user)
     orders = Order.objects.filter(vendors__in=[vendor.id], is_order=True)
+
     recent_order = orders[:10]
+    
+    total_revenue = 0
+
+    for i in orders:
+        pass
+        # total_revenue += i.get_total_by_vendor()['grand_total']
+    
     context = {
         'orders':orders,
         "order_count":orders.count(),
-        "recent_order":recent_order
+        "recent_order":recent_order,
+        "total_revenue":total_revenue
     }
     return render(request, "account/vendor_dashboard.html", context)
 

@@ -14,9 +14,14 @@
 						</div>
 						<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 							<div class="user-dashboard loader-holder">
-								
-								<div class="user-holder">
+								<div class="col-lg-6">
 									<h5 class="text-upercase">Overview</h5>
+								  </div>
+								  <div class="col-lg-6">
+									<h6 class='text-right'>Logged In as :{{user.email}}</h6>
+								  </div>
+								<div class="user-holder">
+									
 								<div class="row">
 									<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mb-2">
 										<div class="card">
@@ -34,7 +39,7 @@
 												Total Revenue
 											</div>
 											<div class="card-body text-center">
-												<a href=""><h5 class="card-title">$ 6440</h5></a>
+												<a href=""><h5 class="card-title">AF {{recent_order.grand_total}}</h5></a>
 											</div>
 										</div>
 									</div>
@@ -63,7 +68,7 @@
 										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 											<div class="user-orders-list">
 												<div class="responsive-table">
-													<table class="table table-hover">
+													<table class="table table-hover" id='my_order'>
 														<thead>
 														  <tr>
 															<th scope="col">Order #</th>
@@ -75,11 +80,12 @@
 														  </tr>
 														</thead>
 														<tbody>
+															
 														   {% for order in recent_order %}
 														  <tr>
 															<td scope="row">{{order.order_number}}</td>
 															<td>{{order.name}}</td>
-															<td>{{order.get_total_by_vendor}} AF</td>
+															<td>{{order.total}} AF</td>
 															<td>{{order.status}}</td>
 															<td>{{order.created_at}}</td>
 															<td><a href="{% url 'vendor_order_detail' order.order_number %}" class='btn btn-danger'>Details</a></td>

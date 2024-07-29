@@ -5,12 +5,13 @@ from datetime import time, date, datetime
 
 
 class Vendor(models.Model):
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='user_profile')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
+    user_profile = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="user_profile"
+    )
     vendor_name = models.CharField(max_length=255)
     vendor_slug = models.SlugField(max_length=255)
-    vendor_licenses = models.ImageField(upload_to='vendor/licenses')
+    vendor_licenses = models.ImageField(upload_to="vendor/licenses")
     is_approved = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
     update_om = models.DateTimeField(auto_now=True)
@@ -24,7 +25,7 @@ class Vendor(models.Model):
         print(today)
         current_opening_hours = OpeningHour.objects.filter(vendor=self, day=today)
         now = datetime.now()
-        current_time = now.strftime('%H:%M:%S')
+        current_time = now.strftime("%H:%M:%S")
         print(current_time)
         is_open = None
         for i in current_opening_hours:
@@ -43,14 +44,14 @@ class Vendor(models.Model):
             # Update
             orig = Vendor.objects.get(pk=self.pk)
             if orig.is_approved != self.is_approved:
-                mail_template = 'account/email/admin_approved.html'
+                mail_template = "account/email/admin_approved.html"
                 context = {
                     "user": self.user,
                     "is_approved": self.is_approved,
-                    "to_email":self.user.email
+                    "to_email": self.user.email,
                 }
                 if self.is_approved:
-                    mail_subject = 'Congratulations! Your restaurant has been approved'
+                    mail_subject = "Congratulations! Your restaurant has been approved"
                 else:
                     mail_subject = "We're sorry, you are not eligible for publishing your food menu on our marketplace."
 
@@ -69,8 +70,11 @@ DAY_CHOICES = [
     (6, "Saturday"),
     (7, "Sunday"),
 ]
-HOUR_OF_DAY_24 = [(time(h, m).strftime('%I:%M %p'), time(h, m).strftime('%I:%M %p')) for h in range(0, 24) for m in
-                  range(0, 31, 30)]
+HOUR_OF_DAY_24 = [
+    (time(h, m).strftime("%I:%M %p"), time(h, m).strftime("%I:%M %p"))
+    for h in range(0, 24)
+    for m in range(0, 31, 30)
+]
 
 
 class OpeningHour(models.Model):
@@ -82,7 +86,7 @@ class OpeningHour(models.Model):
 
     class Meta:
         ordering = ("day", "-from_hour")
-        unique_together = ('vendor', 'day', 'from_hour', 'to_hour')
+        unique_together = ("vendor", "day", "from_hour", "to_hour")
 
     def __str__(self) -> str:
         return self.get_day_display()
@@ -91,12 +95,12 @@ class OpeningHour(models.Model):
 class ReviewRatting(models.Model):
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    subject  = models.CharField(max_length=255)
+    subject = models.CharField(max_length=255)
     review = models.TextField()
     ratting = models.FloatField()
     status = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self) -> str:
         return self.subject

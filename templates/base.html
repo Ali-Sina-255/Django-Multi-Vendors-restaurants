@@ -43,12 +43,20 @@
       rel="stylesheet"
     />
     <link href="{% static 'assets/css/custom.css' %}" rel="stylesheet" />
-
+    
     <!-- JAVASCRIPT -->
+    {% comment %} DataTable Pluing  {% endcomment %}
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.2/css/dataTables.dataTables.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="{% static 'assets/js/modernizr.js' %}"></script>
     <script src="{% static 'assets/js/bootstrap.js' %}"></script>
     <script src="{% static 'assets/js/custom.js' %}"></script>
+    <script src="//cdn.datatables.net/2.1.2/js/dataTables.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#my_order').DataTable();
+      });
+    </script>
   <!-- Include the PayPal JavaScript SDK -->
   {% comment %} <script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&currency=USD"></script> {% endcomment %}
   <script src="https://www.paypal.com/sdk/js?client-id={{PAYPAL_CLIENT_ID}}"></script>
