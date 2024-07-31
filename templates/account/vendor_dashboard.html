@@ -39,7 +39,7 @@
 												Total Revenue
 											</div>
 											<div class="card-body text-center">
-												<a href=""><h5 class="card-title">AF {{recent_order.grand_total}}</h5></a>
+												<a href=""><h5 class="card-title"> {{total_revenue}} AF</h5></a>
 											</div>
 										</div>
 									</div>
@@ -81,11 +81,11 @@
 														</thead>
 														<tbody>
 															
-														   {% for order in recent_order %}
+														   {% for order in orders %}
 														  <tr>
 															<td scope="row">{{order.order_number}}</td>
 															<td>{{order.name}}</td>
-															<td>{{order.total}} AF</td>
+															<td>{{order.get_total_by_vendor.grand_total}} AF</td>
 															<td>{{order.status}}</td>
 															<td>{{order.created_at}}</td>
 															<td><a href="{% url 'vendor_order_detail' order.order_number %}" class='btn btn-danger'>Details</a></td>

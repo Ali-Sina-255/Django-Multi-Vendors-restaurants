@@ -3,10 +3,10 @@ from django.db import models
 from accounts.models import User
 from menu.models import FootItem
 from vendor.models import Vendor
- 
+from decimal import Decimal
+
  
 request_object = ""
-
 
 PAYMENT_METHOD = (
     ('Paypal', 'PayPal'),
@@ -37,7 +37,7 @@ class Order(models.Model):
     order_number = models.CharField(max_length=50)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255)  # Remove unique=True
+    email = models.EmailField(max_length=255) 
     phone_number = models.CharField(max_length=13, blank=True, null=True)
     address = models.CharField(max_length=200, null=True, blank=True)
     state = models.CharField(max_length=100, null=True, blank=True)
@@ -56,38 +56,60 @@ class Order(models.Model):
     
     def order_place_to(self):
         return ",".join([str(i) for i in self.vendors.all()])
-    
-    def get_total_by_vendor(self, request_object):
         
-        vendor = Vendor.objects.get(user=request_object.user)
-        subtotal = 0.0
-        tax = 0.0
-        tax_dict = {}
-
-        if self.total_data:
-            total_data = json.loads(self.total_data)
-            vendor_data = total_data.get(str(vendor.id))
-            
-            for key, val in vendor_data.items():
-                subtotal += float(key)
-                val = val.replace("'", "\"")
-                val = json.loads(val)
-                tax_dict.update(val)
-                
-                for i in val:
-                    for j in val[i]:
-                        tax += float(val([i][j]))
-            
-        grand_total = subtotal + tax
-        context = {
-            "subtotal": subtotal,
-            "tax_dict": tax_dict,
-            "grand_total": grand_total
-        }
-        return context
     
+    def get_total_by_vendor(self):
+        try:
+            vendor = Vendor.objects.get(user=request_object.user)
+            subtotal = 0
+            tax = 0
+            tax_dict = {}
+            if self.total_data:
+                # Debugging: Print the total_data content
+                print(f"Total data before loading JSON: {self.total_data}")
+                
+                # Correctly load the total_data JSON
+                total_data = json.loads(self.total_data.replace("Decimal('", "").replace("')", ""))
+                data = total_data.get(str(vendor.id))
+                if data:
+                    for key, val in data.items():
+                        subtotal += float(key)
+                        val = val.replace("'", '"')
+                        val = json.loads(val)
+                        tax_dict.update(val)
+                        
+                        # calculate tax
+                        for currency, tax_info in val.items():
+                            for tax_rate, tax_amount in tax_info.items():
+                                tax += float(tax_amount)
+                
+                grand_total = float(subtotal) + float(tax)
+                
+                print('grand_total ==========>', grand_total)
+                print('tax ===========>', tax)
+                print('tax_dict ==========>', tax_dict)
+                print('subtotal ===========>', subtotal)
+                context = {
+                    "grand_total":grand_total,
+                    "tax":tax,
+                    "tax_dict":tax_dict,
+                    "subtotal":subtotal
+                }
+                return context # Assuming you want to return the grand total
+            return 0  # Return 0 if there's no data for the vendor
+        except json.JSONDecodeError as e:
+            print(f"JSONDecodeError: {e} for order id: {self.id}, total_data: {self.total_data}")
+            return 0
+        except KeyError as e:
+            print(f"KeyError: {e} for order id: {self.id}")
+            return 0
+        except Exception as e:
+            print(f"Unexpected error: {e} for order id: {self.id}")
+            return 0
     def __str__(self) -> str:
             return self.order_number
+
+
     
 class OrderedFood(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)

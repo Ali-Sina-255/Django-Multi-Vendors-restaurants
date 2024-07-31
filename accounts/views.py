@@ -234,8 +234,7 @@ def vendor_dashboard_view(request):
     total_revenue = 0
 
     for i in orders:
-        pass
-        # total_revenue += i.get_total_by_vendor()['grand_total']
+        total_revenue += i.get_total_by_vendor()['grand_total']
     
     context = {
         'orders':orders,
