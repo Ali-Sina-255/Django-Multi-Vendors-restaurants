@@ -60,43 +60,46 @@ class Order(models.Model):
     
     def get_total_by_vendor(self):
         try:
+            # Get the current vendor from the request object
             vendor = Vendor.objects.get(user=request_object.user)
             subtotal = 0
             tax = 0
             tax_dict = {}
+
             if self.total_data:
-                # Debugging: Print the total_data content
                 print(f"Total data before loading JSON: {self.total_data}")
                 
                 # Correctly load the total_data JSON
                 total_data = json.loads(self.total_data.replace("Decimal('", "").replace("')", ""))
-                data = total_data.get(str(vendor.id))
-                if data:
-                    for key, val in data.items():
-                        subtotal += float(key)
-                        val = val.replace("'", '"')
-                        val = json.loads(val)
-                        tax_dict.update(val)
+                
+                for vendor_id, vendor_data in total_data.items():
+                    for price, tax_data in vendor_data.items():
+                        subtotal += float(price)
+                        tax_data = tax_data.replace("'", '"')
+                        tax_data = json.loads(tax_data)
+                        tax_dict.update(tax_data)
                         
-                        # calculate tax
-                        for currency, tax_info in val.items():
+                        # Calculate tax
+                        for currency, tax_info in tax_data.items():
                             for tax_rate, tax_amount in tax_info.items():
                                 tax += float(tax_amount)
-                
+
                 grand_total = float(subtotal) + float(tax)
                 
                 print('grand_total ==========>', grand_total)
                 print('tax ===========>', tax)
                 print('tax_dict ==========>', tax_dict)
                 print('subtotal ===========>', subtotal)
+                
                 context = {
-                    "grand_total":grand_total,
-                    "tax":tax,
-                    "tax_dict":tax_dict,
-                    "subtotal":subtotal
+                    "grand_total": grand_total,
+                    "tax": tax,
+                    "tax_dict": tax_dict,
+                    "subtotal": subtotal
                 }
-                return context # Assuming you want to return the grand total
-            return 0  # Return 0 if there's no data for the vendor
+                return context  # Return the grand total context
+
+            return 0  # Return 0 if there's no data for any vendor
         except json.JSONDecodeError as e:
             print(f"JSONDecodeError: {e} for order id: {self.id}, total_data: {self.total_data}")
             return 0

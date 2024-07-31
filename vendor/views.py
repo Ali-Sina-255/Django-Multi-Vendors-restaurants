@@ -275,18 +275,12 @@ def vendor_order_details_view(request ,order_number):
     try:
         order = Order.objects.get(order_number=order_number,is_order=True)
         ordered_food = OrderedFood.objects.filter(order=order,food_item__vendor=get_vendor(request))
-        subtotal = 0
-        
-        for item in ordered_food:
-            subtotal +=(item.price * item.quantity)
-            
-        total = subtotal
-            
+    
         context = {
             "order":order,
             "ordered_food":ordered_food,
-        
-            "total":total
+            "subtotal":order.get_total_by_vendor()['subtotal'],
+            "total":order.get_total_by_vendor()["grand_total"]
         }
         return render(request, 'vendor/vendor_order_detail.html',context)   
     except:
