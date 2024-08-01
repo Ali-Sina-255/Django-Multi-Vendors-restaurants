@@ -28,7 +28,9 @@ def send_verification_email(request, user, email_subject, email_template):
         'token': default_token_generator.make_token(user)
     })
     to_email = user.email
+    
     mail = EmailMessage(email_subject, message, to=[to_email])
+    mail.content_subtype = 'html'
     mail.send()
 
 
@@ -44,6 +46,7 @@ def send_reset_password_email(request, user):
     })
     to_email = user.email
     mail = EmailMessage(email_subject, message, form_email, to=[to_email])
+    mail.content_subtype = 'html'
     mail.send()
 
 
@@ -57,4 +60,5 @@ def send_notification(mail_subject, mail_template, context):
         
         to_email = context['to_email']
     mail = EmailMessage(mail_subject, message, from_email, to_email)
+    mail.content_subtype = 'html'
     mail.send()

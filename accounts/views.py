@@ -12,6 +12,7 @@ from vendor.forms import VendorRegisterForm
 from .utils import detect_user, send_verification_email, send_reset_password_email
 from orders.models import Order
 from vendor.models import Vendor
+import datetime
 
 # Restrict the vendor from accessing the customers page
 def check_rol_vendor(user):
@@ -228,9 +229,16 @@ def my_account_view(request):
 def vendor_dashboard_view(request):
     vendor = Vendor.objects.get(user=request.user)
     orders = Order.objects.filter(vendors__in=[vendor.id], is_order=True)
-
     recent_order = orders[:10]
+
+    current_month  = datetime.datetime.now().month
+    current_month_order = orders.filter(vendors__in=[vendor.id], created_at__month=current_month)
+    current_month_revenue = 0
+    for i in current_month_order:
+        current_month_revenue +=i.get_total_by_vendor()['grand_total'] 
+        
     
+
     total_revenue = 0
 
     for i in orders:
@@ -240,7 +248,8 @@ def vendor_dashboard_view(request):
         'orders':orders,
         "order_count":orders.count(),
         "recent_order":recent_order,
-        "total_revenue":total_revenue
+        "total_revenue":total_revenue,
+        "current_month_revenue":current_month_revenue
     }
     return render(request, "account/vendor_dashboard.html", context)
 

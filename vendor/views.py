@@ -211,10 +211,8 @@ def opening_hours_view(request):
 
 def add_opening_hour_view(request):
     if request.user.is_authenticated:
-        if (
-            request.headers.get("x-requested-with") == "XMLHttpRequest"
-            and request.method == "POST"
-        ):
+        if (request.headers.get("x-requested-with") == "XMLHttpRequest"
+            and request.method == "POST"):
             day = request.POST.get("day")
             from_hour = request.POST.get("from_hour")
             to_hour = request.POST.get("to_hour")
