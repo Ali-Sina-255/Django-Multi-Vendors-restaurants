@@ -51,8 +51,7 @@
                                                 State: {{form.state}}
                                             </div>
                                         </div>
-                                      
-                                        
+                                    
                                     </div>
                                   
                                 </div>
@@ -84,11 +83,11 @@
                                                     <a href="{% url 'vendor_detail' item.food_item.vendor.vendor_slug %}" ><span class="badge badge-warning" style='color:white;width: 150px;'>{{item.food_item.vendor}}</span></a>
                                                 </div>
                                                 <div class="quantity" style='display:inline-block; position: absolute; top:50%;transform:translateY(-50%); margin-top:-10px; margin-right:40px '>
-                                                    <span>{{item.quantity}}QTY</span>
+                                                    <span>{{item.quantity}} QTY</span>
                                                 </div>
                                                 <div class="price-holder">
                                                     <span class="price">$ {{item.food_item.price}}</span>
-                                                
+
                                                 </div>
                                             </li>
                                         {% endfor %}
@@ -113,7 +112,7 @@
                                                 </span>
                                             </li>
                                             <h5>Select payment Method </h5>
-                                            <div class="payment_method">
+                                            <div class=" flex payment_method">
                                                 <label >
                                                     <input type="radio" name='payment_method' value='paypal'> 
                                                     <img src="{% static '/assets/images/PayPal.png' %}" alt="paypal" width='100'>
@@ -123,7 +122,6 @@
                                                     <input type="radio" name='payment_method' value='Mastercard'> 
                                                     <img src="{% static '/assets/images/razorpay_logos.png' %}" alt="mastercard" width='100'>
                                                 </label>
-
                                             </div>
                                             <div class='text-danger' id="paymet_method_erros"></div>
                                             <button onclick="return paymentMethod()"; type='submit'  class='btn btn-danger w-100 p-2 mt-3'>Please Order</button>
